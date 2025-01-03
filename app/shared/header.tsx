@@ -10,10 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { AddItemModal } from "./addItemModal";
+import { useState } from "react";
 
 export const Header = () => {
 
     const { setTheme, theme } = useTheme();
+
+    const [showModal, setShowModal] = useState(false);
 
     const onThemeChange = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -48,11 +52,12 @@ export const Header = () => {
                         }
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">Профиль</DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">Добавить</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => setShowModal(true)}>Добавить</DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">Выйти</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
 
         </div>
+        <AddItemModal openAddModal={showModal} setShow={setShowModal} />
     </header>
 }

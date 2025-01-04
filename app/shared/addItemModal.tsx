@@ -10,18 +10,43 @@ import {
 import { mockCategories, mockgenres } from "../mocks/data";
 import { FormInput, FormSelect } from "./formFields";
 import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AddItemFormValues, addItemSchema } from "./schemas/addItemFormSchema";
+import { SearchInput } from "./serchInput";
+import { Item } from "../types";
 
 type AddItemModalProps = {
     editMode?: boolean;
     openAddModal: boolean;
-    setShow: (show: boolean) => void
+    setShow: (show: boolean) => void;
+    editValues?: AddItemFormValues;
 }
 
-export const AddItemModal = ({ editMode = false, openAddModal, setShow }: AddItemModalProps) => {
+export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValues }: AddItemModalProps) => {
 
-    const form = useForm<any>();
+    const form = useForm<AddItemFormValues>({
+        defaultValues: editMode ? editValues : {
+            category: mockCategories[0].value,
+            genre: mockgenres[0].value,
+            name: '',
+            sourceLink: '',
+            imageUrl: '',
+        },
+        resolver: zodResolver(addItemSchema),
+    });
+
+
+    const onItemClick = (item: Item) => {
+        // Используем строгое обновление значений формы
+        form.reset({
+            category: item.category.value,
+            genre: item.genre[0].value,
+            name: item.name,
+            sourceLink: item.sourceLink,
+            imageUrl: item.imageUrl,
+        });
+    };
 
     return <Dialog open={openAddModal} onOpenChange={() => setShow(false)}>
         <DialogContent>
@@ -34,28 +59,20 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow }: AddIte
                 </DialogTitle>
                 <DialogDescription>
                     {
-                        !editMode && <Select >
-
-                            <SelectTrigger>
-                                <SelectValue placeholder="Выбрать из списка" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="1">Название фильма</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        !editMode && <SearchInput onClick={onItemClick} />
                     }
                     <FormProvider {...form}>
-                        <form className='flex flex-col gap-4 mt-4'>
+                        <form key={JSON.stringify(form.getValues())} className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit((data) => console.log(data))}>
+
                             <FormSelect
                                 name="category"
-                                options={mockCategories
-                                    .map(category => ({ label: category.name, value: String(category.id) }))}
+                                options={mockCategories}
 
                             />
                             <FormSelect
                                 name="genre"
-                                options={mockgenres
-                                    .map(genre => ({ label: genre.name, value: String(genre.id) }))}
+                                options={mockgenres}
+
 
                             />
                             <FormInput name="name" placeholder="Название" />

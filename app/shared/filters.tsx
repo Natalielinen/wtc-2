@@ -36,7 +36,7 @@ export const Filters = () => {
                 </SelectTrigger>
                 <SelectContent>
                     {
-                        mockgenres.map(genre => <SelectItem key={genre.id} value={String(genre.id)}>{genre.name}</SelectItem>)
+                        mockgenres.map(genre => <SelectItem key={genre.value} value={genre.value}>{genre.label}</SelectItem>)
                     }
                 </SelectContent>
             </Select>
@@ -47,7 +47,7 @@ export const Filters = () => {
                 </SelectTrigger>
                 <SelectContent>
                     {
-                        mockCategories.map(cat => <SelectItem key={cat.id} value={String(cat.id)}>{cat.name}</SelectItem>)
+                        mockCategories.map(cat => <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>)
                     }
                 </SelectContent>
             </Select>

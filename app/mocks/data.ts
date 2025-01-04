@@ -1,56 +1,56 @@
-import { Category, Item } from "../types";
+import {  Item, Option } from "../types";
 
-export const mockCategories: Array<Category> = [
+export const mockCategories: Array<Option> = [
     {
-        id: 1,
-        name: "Все"
+        value: '1',
+        label: "Все"
     },
     {
-        id: 2,
-        name: "Фильмы"
+        value: '2',
+        label: "Фильмы"
     },
     {
-        id: 3,
-        name: "Игры"
+        value: '3',
+        label: "Игры"
     },
 ]
 
-export const mockgenres: Array<Category> = [
+export const mockgenres: Array<Option> = [
     {
-        id: 0,
-        name: "Все"
+        value: '0',
+        label: "Все"
     },
     {
-        id: 1,
-        name: "Ужасы"
+        value: '1',
+        label: "Ужасы"
     },
     {
-        id: 2,
-        name: "Фантастика"
+        value: '2',
+        label: "Фантастика"
     },
      {
-        id: 3,
-        name: "мультфильм"
+        value: '3',
+        label: "мультфильм"
     },
     {
-        id: 4,
-        name: "фэнтези"
+        value: '4',
+        label: "фэнтези"
     },
     {
-        id: 5,
-        name: "комедия"
+        value: '5',
+        label: "комедия"
     },
     {
-        id: 6,
-        name: "семейный"
+        value: '6',
+        label: "семейный"
     },
      {
-        id: 7,
-        name: "мюзикл"
+        value: '7',
+        label: "мюзикл"
     },
     {
-        id: 8,
-        name: "приключения"
+        value: '8',
+        label: "приключения"
     },
     
 ]
@@ -58,7 +58,7 @@ export const mockgenres: Array<Category> = [
 export const mockdata: Array<Item> = [
     {
         id: 1,
-        category: mockCategories[0],
+        category: mockCategories[1],
         genre: mockgenres.slice(2, 6),
         name: 'Губка Боб квадратные штаны',
         sourceLink: 'https://kadikama.com/144-2000-gubka-bob-kvadratnye-shtany.html',
@@ -68,7 +68,7 @@ export const mockdata: Array<Item> = [
     },
     {
         id: 2,
-        category: mockCategories[0],
+        category: mockCategories[1],
         genre: mockgenres.slice(2, 6),
         name: 'Крутые бобры',
         sourceLink: 'https://kadikama.com/447-1997-krutye-bobry.html',
@@ -78,7 +78,7 @@ export const mockdata: Array<Item> = [
     },
     {
         id: 3,
-        category: mockCategories[0],
+        category: mockCategories[1],
         genre: mockgenres.slice(2),
         name: 'My Little Pony: Зажги свою искорку',
         sourceLink: 'https://kadikama.com/9479-2022-my-little-pony-zazhgi-svoju-iskorku.html',
@@ -88,7 +88,7 @@ export const mockdata: Array<Item> = [
     },
       {
         id: 4,
-        category: mockCategories[0],
+        category: mockCategories[1],
         genre: mockgenres.slice(2),
         name: 'My Little Pony: Новое поколение',
         sourceLink: 'https://kadikama.com/8760-2021-my-little-pony-novoe-pokolenie.html',
@@ -98,7 +98,7 @@ export const mockdata: Array<Item> = [
     },
     {
         id: 5,
-        category: mockCategories[0],
+        category: mockCategories[1],
         genre: [mockgenres[2], mockgenres[5]],
         name: 'Дружные мопсы',
         sourceLink: 'https://kadikama.com/3719-2017-druzhnye-mopsy.html',
@@ -112,8 +112,8 @@ export const mockdata: Array<Item> = [
 
 export const mockGames: Array<Item> = [
      {
-        id: 1,
-        category: mockCategories[1],
+        id: 11,
+        category: mockCategories[2],
         genre: [],
         name: 'Goat Simulator',
         sourceLink: 'https://store.steampowered.com/app/1762930/Goat_Simulator_Remastered/',

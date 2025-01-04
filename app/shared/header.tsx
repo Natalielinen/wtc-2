@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { AddItemModal } from "./addItemModal";
 import { useState } from "react";
+import { AddItemModal } from "./addItemModal";
+
 
 export const Header = () => {
 

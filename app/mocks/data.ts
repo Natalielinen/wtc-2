@@ -106,6 +106,16 @@ export const mockdata: Array<Item> = [
         lastVisited: new Date(),
 
     },
+    {
+        id: 6,
+        category: mockCategories[1],
+        genre: [mockgenres[3]],
+        name: 'Возвращение кота',
+        sourceLink: 'https://hd.kinopoisk.ru/purchases?rt=4a401abd89abaa4ba00eded9304e0cbb',
+        imageUrl: 'https://i.pinimg.com/736x/ac/c0/35/acc03571fb6ae0bded26ee894a9aa3b6.jpg',
+        lastVisited: new Date(),
+
+    },
 
 
 ]

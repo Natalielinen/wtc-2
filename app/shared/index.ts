@@ -6,3 +6,4 @@ export {AddItemModal} from './addItemModal';
 export {ItemsList} from './itemsList';
 export {ErrorText} from './errorText';
 export {ClearButton} from './clearButton';
+export {ProfileForm} from './profileForm';

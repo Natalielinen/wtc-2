@@ -16,6 +16,14 @@ export type Item = {
     lastVisited?: Date;
 }
 
+export type User = {
+    id: number;
+    userName: string;
+    userEmail: string;
+    userPassword: string;
+    uerItems: Array<Item>;
+}
+
 export type Film = {
     kinopoiskId: number;
     imdbId: number | null;

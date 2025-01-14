@@ -47,3 +47,9 @@ export type Film = {
 
 }
 
+export type UserCreateBodyType =  {
+    userName: string;
+    userEmail: string;
+    userPassword: string;
+}
+

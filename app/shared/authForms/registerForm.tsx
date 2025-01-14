@@ -5,6 +5,7 @@ import { registerFormSchema, RegisterFormValues } from "../schemas/registerFormS
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from "../formFields";
 import { Button } from "@/components/ui/button";
+import { registerUser } from "@/app/actions";
 
 export const RegisterForm = () => {
     const form = useForm<RegisterFormValues>({
@@ -16,6 +17,24 @@ export const RegisterForm = () => {
         },
         resolver: zodResolver(registerFormSchema),
     });
+
+    const onRegister = async (data: RegisterFormValues) => {
+        try {
+            await registerUser({
+                userEmail: data.userEmail,
+                userName: data.userName,
+                userPassword: data.userPassword,
+            });
+
+            // toast.success("Регистрация успешна. На почту пришло письмо для подтверждения регистрации");
+
+            //  onClose?.();
+        } catch (error) {
+            console.log(error);
+
+            //  return toast.error("Неверный E-Mail или пароль");
+        }
+    }
 
     return <FormProvider {...form}>
         <form className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit((data) => console.log(data))}>

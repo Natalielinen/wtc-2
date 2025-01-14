@@ -6,6 +6,8 @@ const connection: {
 
 async function dbConnect() {
     if (connection.isConnected) {
+        console.log('Already connected');
+        
         return;
     }
 

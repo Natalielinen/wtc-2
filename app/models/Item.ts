@@ -1,40 +1,34 @@
 import mongoose, { Schema } from "mongoose";
-
-interface IOption {
-    value: string;
-    label: string;
-}
+import {  ICategory } from "./Categoty";
+import { IGenre } from "./Genre";
 
 export interface IItem extends mongoose.Document {
     id: number;
-    category: IOption;
-    genre: IOption[];
+    category: ICategory;
+    genre: IGenre[];
     sourceLink: string;
     name: string;
     imageUrl?: string;
     lastVisited?: Date;
+    userId: mongoose.Types.ObjectId;
 }
 
-// Определяем схему Option
-const OptionSchema = new mongoose.Schema({
-  value: { type: String, required: true },
-  label: { type: String, required: true },
-});
 
 // Схема Item
 export const itemSchema: Schema = new mongoose.Schema(
   {
-    id: { type: Number, required: true },
-    category: { type: OptionSchema, required: true },
-    genre: { type: [OptionSchema], required: true },
+    id: { type: Number, required: true, unique: true },
+    categoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
+    genreIds: { type: [mongoose.Schema.Types.ObjectId], ref: "Genre", required: true },
     sourceLink: { type: String, required: true },
     name: { type: String, required: true },
     imageUrl: { type: String },
     lastVisited: { type: Date },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }
 );
 
-const Item = mongoose.models.Item || mongoose.model<IItem>("Item", itemSchema);
+const Item = mongoose.models?.Item || mongoose.model<IItem>("Item", itemSchema);
 
 export default Item;

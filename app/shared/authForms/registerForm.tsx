@@ -19,25 +19,20 @@ export const RegisterForm = () => {
     });
 
     const onRegister = async (data: RegisterFormValues) => {
-        try {
-            await registerUser({
-                userEmail: data.userEmail,
-                userName: data.userName,
-                userPassword: data.userPassword,
-            });
 
-            // toast.success("Регистрация успешна. На почту пришло письмо для подтверждения регистрации");
-
-            //  onClose?.();
-        } catch (error) {
-            console.log(error);
-
-            //  return toast.error("Неверный E-Mail или пароль");
+        const body = {
+            userName: data.userName,
+            userEmail: data.userEmail,
+            userPassword: data.userPassword
         }
+
+        await fetch('http://localhost:3000/api/register', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+
+
     }
 
     return <FormProvider {...form}>
-        <form className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit((data) => console.log(data))}>
+        <form className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit(onRegister)}>
 
             <FormInput name="userName" placeholder="Имя" type="text" />
             <FormInput name="userEmail" placeholder="Почта" type="email" />

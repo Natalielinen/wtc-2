@@ -5,9 +5,14 @@ import { registerFormSchema, RegisterFormValues } from "../schemas/registerFormS
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from "../formFields";
 import { Button } from "@/components/ui/button";
-import { registerUser } from "@/app/actions";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
-export const RegisterForm = () => {
+type RegisterFormProps = {
+    onAuthModalClose: () => void;
+}
+
+export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
     const form = useForm<RegisterFormValues>({
         defaultValues: {
             userName: '',
@@ -26,7 +31,16 @@ export const RegisterForm = () => {
             userPassword: data.userPassword
         }
 
-        await fetch('http://localhost:3000/api/register', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+        const res = await fetch('http://localhost:3000/api/register', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
+
+
+        if (res) {
+            onAuthModalClose();
+            toast.success('Пользователь успешно зарегистрирован');
+            // await signIn('credentials', { email: data.userEmail, password: data.userPassword });
+        }
+
+        onAuthModalClose();
 
 
     }
@@ -39,7 +53,7 @@ export const RegisterForm = () => {
             <FormInput name="userPassword" placeholder="Пароль" type="password" />
             <FormInput name="retypePassword" placeholder="Повторите пароль" type="password" />
 
-            <Button type="submit">Зарегистрироваться</Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>Зарегистрироваться</Button>
 
         </form>
     </FormProvider>

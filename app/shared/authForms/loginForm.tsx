@@ -3,7 +3,8 @@ import { loginFormSchema, LoginFormValues } from "../schemas/loginFormSchema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from "@/components/ui/button";
 import { FormInput } from "../formFields";
-import { signIn } from "next-auth/react";
+import { auth } from '../../constants/firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import toast from "react-hot-toast";
 
 export const LoginForm = () => {
@@ -15,18 +16,11 @@ export const LoginForm = () => {
         resolver: zodResolver(loginFormSchema),
     });
 
+    //TODO: переделать на firebase!!!! с монго одни проблемы
     const onLogin = async (data: LoginFormValues) => {
         try {
 
-            const resp = await signIn('credentials', {
-                ...data,
-                redirect: false
-            });
-
-
-            if (!resp?.ok) {
-                throw Error();
-            }
+            await signInWithEmailAndPassword(auth, data.userEmail, data.userPassword);
 
             //  onClose?.();
             toast.success('Вы вошли в аккаунт');

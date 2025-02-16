@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { Item } from "../types"
 import { Preview } from "./preview"
+import { db } from "../constants/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 
 type ItemsListProps = {
     data: Array<Item>
@@ -10,17 +12,24 @@ type ItemsListProps = {
 
 export const ItemsList = ({ data }: ItemsListProps) => {
 
-    const fetchItems = async () => {
-        const res = await fetch('http://localhost:3000/api/items', { method: 'GET' });
-        const items = await res.json();
-        console.log('items', items);
-        return items;
+    //console.log('db', db);
 
-    }
+
 
     useEffect(() => {
-        fetchItems();
+        const itemsCollection = collection(db, 'item');
+
+        console.log('itemsCollection', itemsCollection);
+
+        getDocs(itemsCollection).then((snapshot) => {
+            snapshot.docs.forEach((doc) => {
+                console.log(doc.id, " => ", doc.data());
+            });
+        }).catch((error) => {
+            console.error('Error fetching items:', error)
+        });
     }, [])
+
 
 
     return <div className="grid grid-cols-3 gap-4 sm:grid-cols-4">

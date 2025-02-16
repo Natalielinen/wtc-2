@@ -5,8 +5,10 @@ import { registerFormSchema, RegisterFormValues } from "../schemas/registerFormS
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from "../formFields";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
+import { auth, db } from '../../constants/firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from "@firebase/firestore";
 
 type RegisterFormProps = {
     onAuthModalClose: () => void;
@@ -25,23 +27,18 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
 
     const onRegister = async (data: RegisterFormValues) => {
 
-        const body = {
-            userName: data.userName,
-            userEmail: data.userEmail,
-            userPassword: data.userPassword
-        }
+        const userCredential = await createUserWithEmailAndPassword(auth, data.userEmail, data.userPassword);
+        const user = userCredential.user;
+        const uid = user.uid;
 
-        const res = await fetch('http://localhost:3000/api/register', { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
-
-
-        if (res) {
-            onAuthModalClose();
-            toast.success('Пользователь успешно зарегистрирован');
-            // await signIn('credentials', { email: data.userEmail, password: data.userPassword });
-        }
+        await setDoc(doc(db, "user", uid), {
+            uid: uid,
+            email: data.userEmail,
+            displayName: data.userName,
+        });
 
         onAuthModalClose();
-
+        toast.success('Пользователь успешно зарегистрирован');
 
     }
 

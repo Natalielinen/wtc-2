@@ -12,8 +12,11 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useState } from "react";
 import { AddItemModal } from "./addItemModal";
-import { User } from "../types";
 import { LoginModal } from "./loginModal";
+import { useUserStore } from "../stores/userStore";
+import { signOut } from "@firebase/auth";
+import { auth } from "../constants/firebaseConfig";
+import toast from "react-hot-toast";
 
 
 export const Header = () => {
@@ -23,15 +26,19 @@ export const Header = () => {
     const [showModal, setShowModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
 
-    const [user, setMockUser] = useState<User | null>(null);
+    const user = useUserStore((state) => state.currentUser);
 
-    // {
-    //     id: 1,
-    //     userName: 'username',
-    //     userEmail: 'email',
-    //     userPassword: 'password',
-    //     uerItems: []
-    // };
+    const logout = async () => {
+        try {
+            await signOut(auth);
+            useUserStore.getState().logout();
+            toast.success("Вы вышли из аккаунта");
+        } catch (error) {
+            console.error("Error [LOGOUT]", error);
+            toast.error("Ошибка при выходе");
+        }
+    };
+
 
     const onThemeChange = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -41,8 +48,7 @@ export const Header = () => {
         if (!user) {
             setShowLoginModal(true);
         } else {
-            console.log('logout');
-            setMockUser(null);
+            logout();
 
         }
 

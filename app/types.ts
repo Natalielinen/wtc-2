@@ -7,7 +7,7 @@ export type Option = {
 
 
 export type Item = {
-    id: number;
+    id: string;
     category: Option;
     genre: Array<Option>;
     sourceLink: string;
@@ -17,11 +17,11 @@ export type Item = {
 }
 
 export type User = {
-    id: number;
+    id: string;
     userName: string;
     userEmail: string;
     userPassword: string;
-    uerItems: Array<Item>;
+    userItems: Array<Item>;
 }
 
 export type Film = {

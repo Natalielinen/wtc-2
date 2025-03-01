@@ -25,7 +25,7 @@ export const LoginModal = ({ openLoginModal, setOpenLoginModal }: LoginModalProp
                 </DialogTitle>
                 <DialogDescription>
                     {
-                        !registerForm ? <LoginForm /> : <RegisterForm onAuthModalClose={onAuthModalClose} />
+                        !registerForm ? <LoginForm onAuthModalClose={onAuthModalClose} /> : <RegisterForm onAuthModalClose={onAuthModalClose} />
                     }
                     {
                         <Button type="button" className="w-full mt-4" onClick={() => setRegisterForm(!registerForm)}>{!registerForm ? 'Регистрация' : 'Войти'}</Button>

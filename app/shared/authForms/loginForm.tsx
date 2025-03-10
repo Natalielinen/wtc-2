@@ -8,7 +8,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/app/stores/userStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface LoginForm {
     onAuthModalClose: () => void
@@ -26,18 +26,13 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
     const setUser = useUserStore((state) => state.setCurrentUser);
 
 
-
     const onLogin = async (data: LoginFormValues) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, data.userEmail, data.userPassword);
             const firebaseUser = userCredential.user;
 
-            console.log("Firebase user:", firebaseUser);
-
             // Получаем данные пользователя из Firestore
             const userRef = doc(db, "user", firebaseUser.uid);
-
-            console.log("userRef:", userRef);
 
             const userSnap = await getDoc(userRef);
 
@@ -47,7 +42,6 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
 
             const userData = userSnap.data();
 
-            console.log("userData:", userData);
 
             const itemsRef = collection(db, "item");
             const q = query(itemsRef, where("userId", "==", firebaseUser.uid));
@@ -58,7 +52,6 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
                 ...doc.data(),
             }));
 
-            console.log("User items:", userItems);
 
             // Сохраняем пользователя в Zustand
             setUser({
@@ -83,10 +76,10 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
     return <FormProvider {...form}>
         <form className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit(onLogin)}>
 
-            <FormInput name="userEmail" placeholder="Почта" />
-            <FormInput name="userPassword" placeholder="Пароль" />
+            <FormInput name="userEmail" placeholder="Почта" type="email" />
+            <FormInput name="userPassword" placeholder="Пароль" type="password" />
 
-            <Button type="submit">Войти</Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>Войти</Button>
 
         </form>
     </FormProvider>

@@ -1,3 +1,4 @@
+import { Category, Genre } from "@/app/types";
 import { z } from "zod";
 
 export const addItemSchema = z.object({
@@ -9,8 +10,8 @@ export const addItemSchema = z.object({
 });
 
 export type AddItemFormValues = {
-    category: string;
-    genre: string;
+    category: Category;
+    genre: Genre;
     sourceLink: string;
     name: string;
     imageUrl?: string;

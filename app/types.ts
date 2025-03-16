@@ -1,24 +1,22 @@
 
+export type Genre = 'все' | 'ужасы' | 'фэнтези' | 'мультфильм' | 'фантастика' | 'комедия' | 'семейный' | 'драма' | 'боевик' | 'триллер' | 'мьюзикл' | "детектив";
 
-export type Option = {
-    value: string;
-    label: string;
-}
-
+export type Category = 'все' | 'фильмы' | 'игры';
 
 export type Item = {
     id: string;
-    category: Option;
-    genre: Array<Option>;
+    category: Category;
+    genre: Genre;
     sourceLink: string;
     name: string;
     imageUrl?: string;
     lastVisited?: Date;
 }
 
+// то что отправляется на бек
 export type ItemFields = {
-    category: string;
-    genre: string;
+    category: Category;
+    genre: Genre;
     sourceLink: string;
     name: string;
     imageUrl?: string;
@@ -31,7 +29,7 @@ export type User = {
     userName: string;
     userEmail: string;
     userPassword: string;
-    userItems: Array<Item>;
+    userItems: Item[];
 }
 
 export type Film = {

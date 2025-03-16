@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { Item } from "../types";
-import { Pencil, Play } from "lucide-react";
+import { Pencil, Play, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { AddItemModal } from "./addItemModal";
+import { ConfirmDeleteModal } from "./confirmDeleteModal";
 
 
 type PreviewProps = {
@@ -14,6 +15,8 @@ type PreviewProps = {
 
 export const Preview = ({ item }: PreviewProps) => {
     const [show, setShow] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
     return <>
         <div className="relative rounded-2xl cursor-pointer overflow-hidden group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -30,6 +33,10 @@ export const Preview = ({ item }: PreviewProps) => {
                             <Pencil />
                         </Button>
 
+                        <Button variant="ghost" onClick={() => setShowDeleteModal(true)}>
+                            <Trash2 />
+                        </Button>
+
                     </div>
                     <div>
                         <Link href={item.sourceLink} target="_blank">
@@ -42,13 +49,21 @@ export const Preview = ({ item }: PreviewProps) => {
             </div>
         </div>
         <AddItemModal openAddModal={show} setShow={setShow} editValues={{
-            category: item.category.value,
-            genre: item.genre[0]?.value,
+            category: item.category,
+            genre: item.genre,
             sourceLink: item.sourceLink,
             name: item.name,
             imageUrl: item.imageUrl
 
         }} editMode />
+
+        <ConfirmDeleteModal
+            id={item.id}
+            name={item.name}
+            openDeleteModal={showDeleteModal}
+            setShow={setShowDeleteModal}
+
+        />
     </>
 
 

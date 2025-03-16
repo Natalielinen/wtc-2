@@ -11,7 +11,7 @@ interface Props {
     label?: string;
     required?: boolean;
     className?: string;
-    options: { label: string; value: string }[];
+    options: string[];
     placeholder?: string;
     disabled?: boolean;
 }
@@ -21,7 +21,6 @@ export const FormSelect: React.FC<Props> = ({
 }) => {
 
     const { control } = useFormContext();
-
 
     return <div className={className}>
         {
@@ -41,15 +40,14 @@ export const FormSelect: React.FC<Props> = ({
                     <Select onValueChange={field.onChange} disabled={disabled} value={field.value}>
 
                         <SelectTrigger >
-
                             <SelectValue placeholder={placeholder} />
                         </SelectTrigger>
                         <SelectContent >
                             {
                                 options && options.map((item) => <SelectItem
-                                    key={item.value}
-                                    value={item.value}
-                                >{item.label}</SelectItem>)
+                                    key={item}
+                                    value={item}
+                                >{item}</SelectItem>)
                             }
                         </SelectContent>
                     </Select>

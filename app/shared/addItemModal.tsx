@@ -7,7 +7,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { mockCategories, mockgenres } from "../mocks/data";
 import { FormInput, FormSelect } from "./formFields";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,10 +15,11 @@ import { AddItemFormValues, addItemSchema } from "./schemas/addItemFormSchema";
 import { SearchInput } from "./serchInput";
 import { Item, ItemFields } from "../types";
 import { db } from "../constants/firebaseConfig";
-import { addDoc, collection, getDocs, query, where } from "@firebase/firestore";
+import { addDoc, collection } from "@firebase/firestore";
 import { useUserStore } from "../stores/userStore";
 import toast from "react-hot-toast";
-import { log } from "console";
+import { categories, genres } from "../constants/options";
+import { getUsetItems } from "@/lib/getItems";
 
 type AddItemModalProps = {
     editMode?: boolean;
@@ -35,8 +35,8 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
 
     const form = useForm<AddItemFormValues>({
         defaultValues: editMode ? editValues : {
-            category: mockCategories[0].value,
-            genre: mockgenres[0].value,
+            category: categories[0],
+            genre: genres[0],
             name: '',
             sourceLink: '',
             imageUrl: '',
@@ -48,8 +48,8 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
     const onItemClick = (item: Item) => {
         // Используем строгое обновление значений формы
         form.reset({
-            category: item.category.value,
-            genre: item.genre[0].value,
+            category: item.category,
+            genre: item.genre,
             name: item.name,
             sourceLink: item.sourceLink,
             imageUrl: item.imageUrl,
@@ -57,44 +57,37 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
     };
 
     const onSubmit = async (data: AddItemFormValues) => {
-        console.log(data);
-        try {
-            const itemRef = collection(db, "item"); // Ссылка на коллекцию `item`
+        if (!editMode) {
+            try {
+                const itemRef = collection(db, "item"); // Ссылка на коллекцию `item`
 
-            const newItem: ItemFields = {
-                ...data,
-                lastVisited: new Date(),
-                userId: user?.id || '',
-            };
-
-            console.log('user', user);
+                const newItem: ItemFields = {
+                    ...data,
+                    lastVisited: new Date(),
+                    userId: user?.id || '',
+                };
 
 
-            await addDoc(itemRef, newItem); // Добавляем в Firestore
+                await addDoc(itemRef, newItem); // Добавляем в Firestore
 
-            setShow(false);
-
-            const itemsRef = collection(db, "item");
-            const q = query(itemsRef, where("userId", "==", user?.id));
-            const itemsSnap = await getDocs(q);
-
-            const userItems = itemsSnap.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
+                setShow(false);
 
 
-            // Сохраняем пользователя в Zustand
-            setUser({
-                ...user, // Пароль хранить не нужно
-                userItems,
-            });
+                const userItems = await getUsetItems(user?.id || '');
 
-            toast.success('Элемент успешно добавлен');
-        } catch (error) {
-            console.error("Ошибка при добавлении элемента:", error);
-            throw error;
+                // Сохраняем пользователя в Zustand
+                setUser({
+                    ...user,
+                    userItems,
+                });
+
+                toast.success('Элемент успешно добавлен');
+            } catch (error) {
+                console.error("Ошибка при добавлении элемента:", error);
+                throw error;
+            }
         }
+
     };
 
     return <Dialog open={openAddModal} onOpenChange={() => setShow(false)}>
@@ -115,14 +108,12 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
 
                             <FormSelect
                                 name="category"
-                                options={mockCategories}
+                                options={categories}
 
                             />
                             <FormSelect
                                 name="genre"
-                                options={mockgenres}
-
-
+                                options={genres}
                             />
                             <FormInput name="name" placeholder="Название" />
                             <FormInput name="sourceLink" placeholder="Ссылка" />

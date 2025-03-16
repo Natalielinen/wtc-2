@@ -9,8 +9,8 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { ClockArrowDown } from "lucide-react"
-import { mockCategories, mockgenres } from "../mocks/data"
 import { useState } from "react"
+import { categories, genres } from "../constants/options";
 
 type BtnVariant = "outline" | "link" | "default" | "destructive" | "secondary" | "ghost" | null | undefined
 
@@ -25,7 +25,6 @@ export const Filters = () => {
             setBtnVariant("outline");
         }
 
-
     }
 
     return <div className="flex justify-between my-8">
@@ -36,7 +35,7 @@ export const Filters = () => {
                 </SelectTrigger>
                 <SelectContent>
                     {
-                        mockgenres.map(genre => <SelectItem key={genre.value} value={genre.value}>{genre.label}</SelectItem>)
+                        genres.map(genre => <SelectItem key={genre} value={genre}>{genre}</SelectItem>)
                     }
                 </SelectContent>
             </Select>
@@ -47,7 +46,7 @@ export const Filters = () => {
                 </SelectTrigger>
                 <SelectContent>
                     {
-                        mockCategories.map(cat => <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>)
+                        categories.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)
                     }
                 </SelectContent>
             </Select>

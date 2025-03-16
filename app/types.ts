@@ -16,6 +16,16 @@ export type Item = {
     lastVisited?: Date;
 }
 
+export type ItemFields = {
+    category: string;
+    genre: string;
+    sourceLink: string;
+    name: string;
+    imageUrl?: string;
+    lastVisited?: Date;
+    userId: string;
+}
+
 export type User = {
     id: string;
     userName: string;

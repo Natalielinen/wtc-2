@@ -15,7 +15,7 @@ import { AddItemFormValues, addItemSchema } from "./schemas/addItemFormSchema";
 import { SearchInput } from "./serchInput";
 import { Item, ItemFields } from "../types";
 import { db } from "../constants/firebaseConfig";
-import { addDoc, collection } from "@firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "@firebase/firestore";
 import { useUserStore } from "../stores/userStore";
 import toast from "react-hot-toast";
 import { categories, genres } from "../constants/options";
@@ -26,9 +26,10 @@ type AddItemModalProps = {
     openAddModal: boolean;
     setShow: (show: boolean) => void;
     editValues?: AddItemFormValues;
+    itemId?: string;
 }
 
-export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValues }: AddItemModalProps) => {
+export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValues, itemId }: AddItemModalProps) => {
 
     const user = useUserStore((state) => state.currentUser);
     const setUser = useUserStore((state) => state.setCurrentUser);
@@ -67,11 +68,9 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
                     userId: user?.id || '',
                 };
 
-
                 await addDoc(itemRef, newItem); // Добавляем в Firestore
 
                 setShow(false);
-
 
                 const userItems = await getUsetItems(user?.id || '');
 
@@ -85,6 +84,28 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
             } catch (error) {
                 console.error("Ошибка при добавлении элемента:", error);
                 throw error;
+            }
+        } else {
+            try {
+                if (!itemId) {
+                    return;
+                }
+                const itemRef = doc(db, "item", itemId);
+                await updateDoc(itemRef, data);
+
+                const userItems = await getUsetItems(user?.id || '');
+
+                // Сохраняем пользователя в Zustand
+                setUser({
+                    ...user,
+                    userItems,
+                });
+                toast.success('Элемент успешно обновлен');
+            } catch (error) {
+                toast.error(`Ошибка при обновлении элемента: ${error}`);
+                throw error;
+            } finally {
+                setShow(false);
             }
         }
 

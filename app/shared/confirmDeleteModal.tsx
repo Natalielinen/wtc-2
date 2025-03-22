@@ -43,7 +43,9 @@ export const ConfirmDeleteModal = ({ openDeleteModal, setShow, name, id }: Confi
             setDeleting(false);
             setShow(false);
 
-            const userItems = await getUsetItems(user?.id || '');
+            const userItems = await getUsetItems({
+                userId: user?.id || '',
+            });
 
             // Сохраняем пользователя в Zustand
             setUser({

@@ -8,7 +8,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/app/stores/userStore";
-import { useEffect, useState } from "react";
 
 interface LoginForm {
     onAuthModalClose: () => void

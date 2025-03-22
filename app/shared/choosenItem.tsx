@@ -14,7 +14,7 @@ export const ChoosenItem = ({ item }: ChoosenItem) => {
             <Link href={item.sourceLink} target="_blank">
                 <p className="mt-4 text-center" >
                     {
-                        item.category.id === 1 ? "Смотреть" : "Играть"
+                        item.category === "фильмы" ? "Смотреть" : "Играть"
                     }
 
                 </p>

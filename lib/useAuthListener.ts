@@ -3,7 +3,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { useUserStore } from "@/app/stores/userStore";
 import { auth, db } from "@/app/constants/firebaseConfig";
-// Твой Zustand store
 
 const useAuthListener = () => {
     const setUser = useUserStore((state) => state.setCurrentUser);
@@ -16,7 +15,7 @@ const useAuthListener = () => {
 
                 const userSnap = await getDoc(userRef);
                 const userData = userSnap.data();
-
+                
                 // Получаем userItems из Firestore
                 const itemsRef = collection(db, "item");
                 const q = query(itemsRef, where("userId", "==", firebaseUser.uid));

@@ -3,18 +3,34 @@
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, FileQuestion } from "lucide-react"
 import Link from "next/link"
-import { Item } from "../types"
-import { useState } from "react"
+import { Category, Item } from "../types"
+import { useEffect, useState } from "react"
 import { ChoosenItem } from "./choosenItem";
+import { useUserStore } from "../stores/userStore";
 
 type ChooseContainerProps = {
     buttonText: string,
-    data: Array<Item>
+    category: Category,
 }
 
-export const ChooseContainer = ({ buttonText, data }: ChooseContainerProps) => {
+export const ChooseContainer = ({ buttonText, category }: ChooseContainerProps) => {
 
     const [choosenItem, setChosenItem] = useState<Item | null>(null);
+
+    const [data, setData] = useState<Array<Item>>([]);
+
+    const user = useUserStore((state) => state.currentUser);
+
+    useEffect(() => {
+        switch (category) {
+            case "фильмы":
+                setData(user?.userItems.filter((item) => item.category === "фильмы") || []);
+                break;
+            case "игры":
+                setData(user?.userItems.filter((item) => item.category === "игры") || []);
+                break;
+        }
+    }, [category, user?.userItems])
 
     const onChooseItem = () => {
         const randomIndex = Math.floor(Math.random() * data.length);

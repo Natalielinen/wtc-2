@@ -20,6 +20,7 @@ import { useUserStore } from "../stores/userStore";
 import toast from "react-hot-toast";
 import { categories, genres } from "../constants/options";
 import { getUsetItems } from "@/lib/getItems";
+import { useEffect } from "react";
 
 type AddItemModalProps = {
     editMode?: boolean;
@@ -44,6 +45,7 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
         },
         resolver: zodResolver(addItemSchema),
     });
+
 
 
     const onItemClick = (item: Item) => {
@@ -72,7 +74,9 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
 
                 setShow(false);
 
-                const userItems = await getUsetItems(user?.id || '');
+                const userItems = await getUsetItems({
+                    userId: user?.id || '',
+                });
 
                 // Сохраняем пользователя в Zustand
                 setUser({
@@ -93,7 +97,9 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
                 const itemRef = doc(db, "item", itemId);
                 await updateDoc(itemRef, data);
 
-                const userItems = await getUsetItems(user?.id || '');
+                const userItems = await getUsetItems({
+                    userId: user?.id || '',
+                });
 
                 // Сохраняем пользователя в Zustand
                 setUser({

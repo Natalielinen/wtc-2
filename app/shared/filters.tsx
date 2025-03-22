@@ -11,25 +11,78 @@ import {
 import { ClockArrowDown } from "lucide-react"
 import { useState } from "react"
 import { categories, genres } from "../constants/options";
+import { useUserStore } from "../stores/userStore";
+import { getUsetItems } from "@/lib/getItems";
+import { Category, Genre } from "../types";
 
 type BtnVariant = "outline" | "link" | "default" | "destructive" | "secondary" | "ghost" | null | undefined
 
 export const Filters = () => {
 
     const [btnVariant, setBtnVariant] = useState<BtnVariant>("outline")
+    const [sorted, setSorted] = useState<boolean>(false)
 
-    const onLongTimeNoWatch = () => {
+    const user = useUserStore((state) => state.currentUser);
+    const setUser = useUserStore((state) => state.setCurrentUser);
+
+    const onLongTimeNoWatch = async () => {
+
         if (btnVariant === "outline") {
             setBtnVariant("default");
+            setSorted(true);
         } else {
             setBtnVariant("outline");
+            setSorted(false);
+        }
+
+        const filteredItems = await getUsetItems({
+            userId: user?.id || '',
+            sortByDate: sorted
+        });
+
+        setUser({
+            ...user,
+            userItems: filteredItems,
+        });
+
+    }
+
+    const onGenreChange = async (genre: Genre) => {
+
+        if (genre) {
+            const filteredItems = await getUsetItems({
+                userId: user?.id || '',
+                genre
+            });
+
+            setUser({
+                ...user,
+                userItems: filteredItems,
+            });
+        }
+
+
+    }
+
+    const onCategoryChange = async (category: Category) => {
+
+        if (category) {
+            const filteredItems = await getUsetItems({
+                userId: user?.id || '',
+                category
+            });
+
+            setUser({
+                ...user,
+                userItems: filteredItems,
+            });
         }
 
     }
 
     return <div className="flex justify-between my-8">
         <div className="flex gap-4" >
-            <Select>
+            <Select onValueChange={onGenreChange}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Жанр" />
                 </SelectTrigger>
@@ -40,7 +93,7 @@ export const Filters = () => {
                 </SelectContent>
             </Select>
 
-            <Select>
+            <Select onValueChange={onCategoryChange}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Категория" />
                 </SelectTrigger>

@@ -5,7 +5,7 @@ import { cn } from '../../lib/utils';
 import { Search } from 'lucide-react';
 import { useClickAway, useDebounce } from 'react-use';
 import { Film, Item } from '../types';
-import { mockgenres } from '../mocks/data';
+import { genres } from '../constants/options';
 
 interface Props {
     className?: string;
@@ -38,7 +38,7 @@ export const SearchInput: React.FC<Props> = ({ className, onClick }) => {
                     value: '1',
                     label: 'Фильмы'
                 },
-                genre: [mockgenres[0]],
+                genre: [genres[0]],
                 sourceLink: '',
                 name: film?.nameRu || film?.nameEn || film?.nameOriginal,
                 imageUrl: film?.posterUrl,

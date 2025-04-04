@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect } from "react"; // Импорт Firebase
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { useUserStore } from "@/app/stores/userStore";
 import { auth, db } from "@/app/constants/firebaseConfig";
+import { Item } from "@/app/types";
 
 const useAuthListener = () => {
     const setUser = useUserStore((state) => state.setCurrentUser);
@@ -21,7 +23,8 @@ const useAuthListener = () => {
                 const q = query(itemsRef, where("userId", "==", firebaseUser.uid));
                 const itemsSnap = await getDocs(q);
 
-                const userItems = itemsSnap.docs.map((doc) => ({
+                //@ts-ignore
+                const userItems: Item[] = itemsSnap.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
                 }));

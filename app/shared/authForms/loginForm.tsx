@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { FormProvider, useForm } from "react-hook-form"
 import { loginFormSchema, LoginFormValues } from "../schemas/loginFormSchema";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +9,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/app/stores/userStore";
+import { Item } from "@/app/types";
 
 interface LoginForm {
     onAuthModalClose: () => void
@@ -46,7 +48,8 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
             const q = query(itemsRef, where("userId", "==", firebaseUser.uid));
             const itemsSnap = await getDocs(q);
 
-            const userItems = itemsSnap.docs.map((doc) => ({
+            // @ts-ignore
+            const userItems: Item[] = itemsSnap.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             }));

@@ -4,7 +4,7 @@ import { User } from '../types';
 
 interface UserStore {
     currentUser: User | null;
-    setCurrentUser: (user: User) => void;
+    setCurrentUser: (user: User | null) => void;
     logout: () => void
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -48,10 +49,8 @@ export const ConfirmDeleteModal = ({ openDeleteModal, setShow, name, id }: Confi
             });
 
             // Сохраняем пользователя в Zustand
-            setUser({
-                ...user,
-                userItems,
-            });
+            // @ts-ignore
+            setUser({ ...user, userItems, });
         }
     };
 

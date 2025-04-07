@@ -78,3 +78,5 @@ export const ConfirmDeleteModal = ({ openDeleteModal, setShow, name, id }: Confi
         </DialogContent>
     </Dialog>
 }
+
+export default ConfirmDeleteModal;

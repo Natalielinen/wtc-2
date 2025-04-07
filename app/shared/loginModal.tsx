@@ -11,11 +11,11 @@ type LoginModalProps = {
 }
 
 export const LoginModal = ({ openLoginModal, setOpenLoginModal }: LoginModalProps) => {
+    // Данные и состояние
+    const [registerForm, setRegisterForm] = useState<boolean>(false);
 
-    const [registerForm, setRegisterForm] = useState(false);
-
+    // Взаимодействие с UI
     const onAuthModalClose = () => setOpenLoginModal(false);
-
 
     return <Dialog open={openLoginModal} onOpenChange={onAuthModalClose}>
         <DialogContent>

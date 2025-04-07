@@ -5,21 +5,24 @@ import { Item } from "../types";
 import { Pencil, Play, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { AddItemModal } from "./addItemModal";
-import { ConfirmDeleteModal } from "./confirmDeleteModal";
 import toast from "react-hot-toast";
 import { doc, updateDoc } from "@firebase/firestore";
 import { db } from "../constants/firebaseConfig";
+import React from "react";
 
+const AddItemModal = React.lazy(() => import("./addItemModal"))
+const ConfirmDeleteModal = React.lazy(() => import("./confirmDeleteModal"))
 
 type PreviewProps = {
     item: Item;
 }
 
 export const Preview = ({ item }: PreviewProps) => {
-    const [show, setShow] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    // Данные и состояние
+    const [show, setShow] = useState<boolean>(false);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
+    // Взаимодействие с UI
     const onPlayClick = async () => {
         try {
             if (!item.id) {
@@ -37,9 +40,7 @@ export const Preview = ({ item }: PreviewProps) => {
         }
     }
 
-    console.log('item', item);
-
-
+    // UI
     return <>
         <div className="relative rounded-2xl cursor-pointer overflow-hidden group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -53,8 +54,6 @@ export const Preview = ({ item }: PreviewProps) => {
                     <div className="bg-black bg-opacity-50 p-4 flex justify-between ">
                         <p>
                             <p>{item.name}</p>
-                            {/* <p>{new Date(item.lastVisited?.seconds).toLocaleString()}</p> */}
-
                         </p>
                         <Button variant="ghost" onClick={() => setShow(true)}>
                             <Pencil />

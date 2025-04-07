@@ -151,3 +151,5 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
         </DialogContent>
     </Dialog>
 }
+
+export default AddItemModal;

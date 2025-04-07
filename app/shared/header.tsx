@@ -18,16 +18,14 @@ import { signOut } from "@firebase/auth";
 import { auth } from "../constants/firebaseConfig";
 import toast from "react-hot-toast";
 
-
 export const Header = () => {
-
-    const { setTheme, theme } = useTheme();
-
-    const [showModal, setShowModal] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false);
-
+    // Данные и состояние
     const user = useUserStore((state) => state.currentUser);
+    const { setTheme, theme } = useTheme();
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
 
+    // Получение и обработка данных
     const logout = async () => {
         try {
             await signOut(auth);
@@ -39,21 +37,20 @@ export const Header = () => {
         }
     };
 
-
+    // Взаимодействие с UI
     const onThemeChange = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
-    }
+    };
 
     const onLoginClick = () => {
         if (!user) {
             setShowLoginModal(true);
         } else {
             logout();
-
         }
+    };
 
-    }
-
+    // UI
     return <header className="flex justify-between mb-8">
         <div className="flex gap-4">
             <Link href="/chooseMovie">
@@ -67,8 +64,8 @@ export const Header = () => {
                     <Gamepad2 />
                 </Button>
             </Link>
-
         </div>
+
         <div>
             <DropdownMenu >
                 <DropdownMenuTrigger>
@@ -92,12 +89,11 @@ export const Header = () => {
                             <DropdownMenuItem className="cursor-pointer" onClick={() => setShowModal(true)}>Добавить</DropdownMenuItem>
                         </>
                     }
-
                     <DropdownMenuItem className="cursor-pointer" onClick={onLoginClick}>{user ? 'Выйти' : 'Войти'}</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-
         </div>
+
         <AddItemModal openAddModal={showModal} setShow={setShowModal} />
         <LoginModal openLoginModal={showLoginModal} setOpenLoginModal={setShowLoginModal} />
     </header>

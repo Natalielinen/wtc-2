@@ -14,15 +14,12 @@ interface Props {
 
 export const SearchInput: React.FC<Props> = ({ className, onClick }) => {
 
-    const [focused, setFocused] = React.useState(false);
-    const [searchQuery, setSearchQuery] = React.useState('');
+    // Данные и состояние
+    const [focused, setFocused] = React.useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = React.useState<string>('');
     const [items, setItems] = React.useState<Item[]>([]);
 
-    const ref = React.useRef<HTMLInputElement>(null);
-
-    useClickAway(ref, () => setFocused(false));
-
-
+    // Получение и обработка данных
     const getFilms = () => {
         fetch('https://kinopoiskapiunofficial.tech/api/v2.2/films?page=1&keyword=' + searchQuery, {
             method: 'GET',
@@ -44,9 +41,7 @@ export const SearchInput: React.FC<Props> = ({ className, onClick }) => {
                 imageUrl: film?.posterUrl,
             }))))
             .catch(err => console.log(err))
-
     }
-
 
     useDebounce(
         async () => {
@@ -62,6 +57,7 @@ export const SearchInput: React.FC<Props> = ({ className, onClick }) => {
         [searchQuery]
     );
 
+    // Взаимодействие с UI
     const onClickItem = (item: Item) => {
         setFocused(false);
         setSearchQuery(item.name);
@@ -69,6 +65,10 @@ export const SearchInput: React.FC<Props> = ({ className, onClick }) => {
         onClick(item);
     };
 
+    const ref = React.useRef<HTMLInputElement>(null);
+    useClickAway(ref, () => setFocused(false));
+
+    // UI
     return (
         <>
             {
@@ -120,8 +120,6 @@ export const SearchInput: React.FC<Props> = ({ className, onClick }) => {
 
                     </div>
                 }
-
-
             </div>
         </>
 

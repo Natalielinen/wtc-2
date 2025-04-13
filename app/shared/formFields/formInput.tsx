@@ -29,7 +29,6 @@ export const FormInput: React.FC<Props> = (
         setValue
     } = useFormContext();
 
-
     const value = watch(name);
     const error = errors[name];
 

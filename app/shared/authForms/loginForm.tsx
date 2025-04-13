@@ -16,6 +16,8 @@ interface LoginForm {
 }
 
 export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
+    const setUser = useUserStore((state) => state.setCurrentUser);
+
     const form = useForm<LoginFormValues>({
         defaultValues: {
             userEmail: '',
@@ -23,9 +25,6 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
         },
         resolver: zodResolver(loginFormSchema),
     });
-
-    const setUser = useUserStore((state) => state.setCurrentUser);
-
 
     const onLogin = async (data: LoginFormValues) => {
         try {
@@ -43,7 +42,6 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
 
             const userData = userSnap.data();
 
-
             const itemsRef = collection(db, "item");
             const q = query(itemsRef, where("userId", "==", firebaseUser.uid));
             const itemsSnap = await getDocs(q);
@@ -54,7 +52,6 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
                 ...doc.data(),
             }));
 
-
             // Сохраняем пользователя в Zustand
             setUser({
                 id: userData.uid,
@@ -63,8 +60,6 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
                 userPassword: "", // Пароль хранить не нужно
                 userItems,
             });
-
-
 
             toast.success("Вы вошли в аккаунт");
         } catch (error) {

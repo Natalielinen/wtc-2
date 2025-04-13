@@ -24,12 +24,11 @@ type ConfirmDeleteModalProps = {
 }
 
 export const ConfirmDeleteModal = ({ openDeleteModal, setShow, name, id }: ConfirmDeleteModalProps) => {
-
+    // Данные и состояние
     const [deleting, setDeleting] = useState(false);
 
     const user = useUserStore((state) => state.currentUser);
     const setUser = useUserStore((state) => state.setCurrentUser);
-
 
     const deleteItem = async () => {
         setDeleting(true);
@@ -70,9 +69,7 @@ export const ConfirmDeleteModal = ({ openDeleteModal, setShow, name, id }: Confi
                         <Button variant="secondary" onClick={() => setShow(false)} disabled={deleting}>
                             Отменить
                         </Button>
-
                     </div>
-
                 </DialogDescription>
             </DialogHeader>
         </DialogContent>

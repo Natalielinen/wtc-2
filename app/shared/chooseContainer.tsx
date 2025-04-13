@@ -16,7 +16,6 @@ type ChooseContainerProps = {
 export const ChooseContainer = ({ buttonText, category }: ChooseContainerProps) => {
 
     const [choosenItem, setChosenItem] = useState<Item | null>(null);
-
     const [data, setData] = useState<Array<Item>>([]);
 
     const user = useUserStore((state) => state.currentUser);
@@ -34,7 +33,9 @@ export const ChooseContainer = ({ buttonText, category }: ChooseContainerProps) 
 
     const onChooseItem = () => {
         const randomIndex = Math.floor(Math.random() * data.length);
-        setChosenItem(data[randomIndex]);
+
+        setChosenItem(data[randomIndex])
+
     }
 
     return (
@@ -47,15 +48,11 @@ export const ChooseContainer = ({ buttonText, category }: ChooseContainerProps) 
             <Button onClick={onChooseItem}>
                 {buttonText}
             </Button>
-
             {
                 choosenItem
                     ? <ChoosenItem item={choosenItem} />
                     : <FileQuestion size={100} />
             }
-
-
-
         </div>
     )
 }

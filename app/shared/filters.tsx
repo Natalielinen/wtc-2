@@ -19,15 +19,15 @@ import { Category, Genre } from "../types";
 type BtnVariant = "outline" | "link" | "default" | "destructive" | "secondary" | "ghost" | null | undefined
 
 export const Filters = () => {
-
+    // Данные и состояние
     const [btnVariant, setBtnVariant] = useState<BtnVariant>("outline")
     const [sorted, setSorted] = useState<boolean>(false)
 
     const user = useUserStore((state) => state.currentUser);
     const setUser = useUserStore((state) => state.setCurrentUser);
 
+    // Получение и обработка данных
     const onLongTimeNoWatch = async () => {
-
         if (btnVariant === "outline") {
             setBtnVariant("default");
             setSorted(true);
@@ -59,7 +59,6 @@ export const Filters = () => {
             // @ts-ignore
             setUser({ ...user, userItems: filteredItems, });
         }
-
 
     }
 

@@ -16,9 +16,7 @@ export const ChoosenItem = ({ item }: ChoosenItem) => {
                     {
                         item.category === "фильмы" ? "Смотреть" : "Играть"
                     }
-
                 </p>
-
             </Link>
         </div>
 

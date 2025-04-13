@@ -46,8 +46,6 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
         resolver: zodResolver(addItemSchema),
     });
 
-
-
     const onItemClick = (item: Item) => {
         // Используем строгое обновление значений формы
         form.reset({

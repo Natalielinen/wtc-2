@@ -4,18 +4,18 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { LoginForm, RegisterForm } from "./authForms";
+import { useUserStore } from "../stores/userStore";
 
-type LoginModalProps = {
-    openLoginModal: boolean;
-    setOpenLoginModal: (open: boolean) => void
-}
-
-export const LoginModal = ({ openLoginModal, setOpenLoginModal }: LoginModalProps) => {
+export const LoginModal = () => {
     // Данные и состояние
     const [registerForm, setRegisterForm] = useState<boolean>(false);
+    const { openLoginModal, setOpenLoginModal } = useUserStore((state) => state);
 
     // Взаимодействие с UI
-    const onAuthModalClose = () => setOpenLoginModal(false);
+    const onAuthModalClose = () => {
+        setOpenLoginModal(false);
+        setRegisterForm(false);
+    }
 
     return <Dialog open={openLoginModal} onOpenChange={onAuthModalClose}>
         <DialogContent>

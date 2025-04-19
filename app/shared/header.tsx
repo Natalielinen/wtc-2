@@ -20,10 +20,9 @@ import toast from "react-hot-toast";
 
 export const Header = () => {
     // Данные и состояние
-    const user = useUserStore((state) => state.currentUser);
+    const { currentUser: user, setOpenLoginModal } = useUserStore((state) => state);
     const { setTheme, theme } = useTheme();
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
 
     // Получение и обработка данных
     const logout = async () => {
@@ -44,7 +43,7 @@ export const Header = () => {
 
     const onLoginClick = () => {
         if (!user) {
-            setShowLoginModal(true);
+            setOpenLoginModal(true);
         } else {
             logout();
         }
@@ -54,13 +53,13 @@ export const Header = () => {
     return <header className="flex justify-between mb-8">
         <div className="flex gap-4">
             <Link href="/chooseMovie">
-                <Button variant="outline">
+                <Button variant="outline" disabled={!user}>
                     <Clapperboard />
                 </Button>
             </Link>
 
             <Link href="/chooseGame">
-                <Button variant="outline">
+                <Button variant="outline" disabled={!user}>
                     <Gamepad2 />
                 </Button>
             </Link>
@@ -95,6 +94,6 @@ export const Header = () => {
         </div>
 
         <AddItemModal openAddModal={showModal} setShow={setShowModal} />
-        <LoginModal openLoginModal={showLoginModal} setOpenLoginModal={setShowLoginModal} />
+        <LoginModal />
     </header>
 }

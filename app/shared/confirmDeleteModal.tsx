@@ -9,9 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { deleteDoc, doc } from "@firebase/firestore";
 import toast from "react-hot-toast";
-import { db } from "../constants/firebaseConfig";
 import { useState } from "react";
 import { getUsetItems } from "@/lib/getItems";
 import { useUserStore } from "../stores/userStore";
@@ -33,8 +31,7 @@ export const ConfirmDeleteModal = ({ openDeleteModal, setShow, name, id }: Confi
     const deleteItem = async () => {
         setDeleting(true);
         try {
-            const itemRef = doc(db, "item", id); // Ссылка на документ в коллекции `item`
-            await deleteDoc(itemRef);
+
             toast.success(`Элемент ${name} успешно удален`);
         } catch (error) {
             toast.error(`Ошибка при удалении элемента ${name}`);
@@ -49,7 +46,7 @@ export const ConfirmDeleteModal = ({ openDeleteModal, setShow, name, id }: Confi
 
             // Сохраняем пользователя в Zustand
             // @ts-ignore
-            setUser({ ...user, userItems, });
+            // setUser({ ...user, userItems, });
         }
     };
 

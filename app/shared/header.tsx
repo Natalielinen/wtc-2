@@ -14,8 +14,6 @@ import { useState } from "react";
 import { AddItemModal } from "./addItemModal";
 import { LoginModal } from "./loginModal";
 import { useUserStore } from "../stores/userStore";
-import { signOut } from "@firebase/auth";
-import { auth } from "../constants/firebaseConfig";
 import toast from "react-hot-toast";
 
 export const Header = () => {
@@ -27,8 +25,7 @@ export const Header = () => {
     // Получение и обработка данных
     const logout = async () => {
         try {
-            await signOut(auth);
-            useUserStore.getState().logout();
+
             toast.success("Вы вышли из аккаунта");
         } catch (error) {
             console.error("Error [LOGOUT]", error);

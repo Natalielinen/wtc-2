@@ -6,9 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from "../formFields";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
-import { auth, db } from '../../constants/firebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from "@firebase/firestore";
 
 type RegisterFormProps = {
     onAuthModalClose: () => void;
@@ -27,17 +24,6 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
 
     const onRegister = async (data: RegisterFormValues) => {
 
-        const userCredential = await createUserWithEmailAndPassword(auth, data.userEmail, data.userPassword);
-        const user = userCredential.user;
-        const uid = user.uid;
-
-        await setDoc(doc(db, "user", uid), {
-            uid: uid,
-            email: data.userEmail,
-            displayName: data.userName,
-        });
-
-        onAuthModalClose();
         toast.success('Пользователь успешно зарегистрирован');
 
     }

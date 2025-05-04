@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { FormProvider, useForm } from "react-hook-form"
 import { loginFormSchema, LoginFormValues } from "../schemas/loginFormSchema";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from "@/components/ui/button";
 import { FormInput } from "../formFields";
-import { auth, db } from '../../constants/firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/app/stores/userStore";
 import { Item } from "@/app/types";
@@ -28,38 +25,16 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
 
     const onLogin = async (data: LoginFormValues) => {
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, data.userEmail, data.userPassword);
-            const firebaseUser = userCredential.user;
 
-            // Получаем данные пользователя из Firestore
-            const userRef = doc(db, "user", firebaseUser.uid);
-
-            const userSnap = await getDoc(userRef);
-
-            if (!userSnap.exists()) {
-                throw new Error("Пользователь не найден в базе");
-            }
-
-            const userData = userSnap.data();
-
-            const itemsRef = collection(db, "item");
-            const q = query(itemsRef, where("userId", "==", firebaseUser.uid));
-            const itemsSnap = await getDocs(q);
-
-            // @ts-ignore
-            const userItems: Item[] = itemsSnap.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
 
             // Сохраняем пользователя в Zustand
-            setUser({
-                id: userData.uid,
-                userName: userData.displayName,
-                userEmail: userData.email,
-                userPassword: "", // Пароль хранить не нужно
-                userItems,
-            });
+            // setUser({
+            //     id: userData.uid,
+            //     userName: userData.displayName,
+            //     userEmail: userData.email,
+            //     userPassword: "", // Пароль хранить не нужно
+            //     userItems,
+            // });
 
             toast.success("Вы вошли в аккаунт");
         } catch (error) {

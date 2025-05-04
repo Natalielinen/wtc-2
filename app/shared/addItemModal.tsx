@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 'use client';
 
 import {
@@ -15,8 +15,6 @@ import { Button } from "@/components/ui/button";
 import { AddItemFormValues, addItemSchema } from "./schemas/addItemFormSchema";
 import { SearchInput } from "./serchInput";
 import { Item, ItemFields } from "../types";
-import { db } from "../constants/firebaseConfig";
-import { addDoc, collection, doc, updateDoc } from "@firebase/firestore";
 import { useUserStore } from "../stores/userStore";
 import toast from "react-hot-toast";
 import { categories, genres } from "../constants/options";
@@ -60,25 +58,11 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
     const onSubmit = async (data: AddItemFormValues) => {
         if (!editMode) {
             try {
-                const itemRef = collection(db, "item"); // Ссылка на коллекцию `item`
 
-                const newItem: ItemFields = {
-                    ...data,
-                    lastVisited: new Date(),
-                    userId: user?.id || '',
-                };
-
-                await addDoc(itemRef, newItem); // Добавляем в Firestore
-
-                setShow(false);
-
-                const userItems = await getUsetItems({
-                    userId: user?.id || '',
-                });
 
                 // Сохраняем пользователя в Zustand
-                // @ts-ignore
-                setUser({ ...user, userItems, });
+
+                //  setUser({ ...user, userItems, });
 
                 toast.success('Элемент успешно добавлен');
             } catch (error) {
@@ -90,16 +74,11 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
                 if (!itemId) {
                     return;
                 }
-                const itemRef = doc(db, "item", itemId);
-                await updateDoc(itemRef, data);
 
-                const userItems = await getUsetItems({
-                    userId: user?.id || '',
-                });
 
                 // Сохраняем пользователя в Zustand
-                // @ts-ignore
-                setUser({ ...user, userItems, });
+
+                // setUser({ ...user, userItems, });
                 toast.success('Элемент успешно обновлен');
             } catch (error) {
                 toast.error(`Ошибка при обновлении элемента: ${error}`);
@@ -125,7 +104,7 @@ export const AddItemModal = ({ editMode = false, openAddModal, setShow, editValu
                         !editMode && <SearchInput onClick={onItemClick} />
                     }
                     <FormProvider {...form}>
-                        <form key={JSON.stringify(form.getValues())} className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit(onSubmit)}>
+                        <form className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit(onSubmit)}>
 
                             <FormSelect
                                 name="category"

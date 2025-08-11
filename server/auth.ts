@@ -10,49 +10,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
   },
-  // callbacks: {
-  //   async session({session, token}) {
-  //     if(session && token.sub) {
-  //       session.user.id = token.sub;
-  //     }
-
-  //     if(session.user && token.role) {
-  //       session.user.role = token.role as string;
-  //     }
-
-  //     if(session.user) {
-  //       session.user.name = token.name;
-  //       session.user.email = token.email as string;
-  //       session.user.isOAuth = token.isOAuth as boolean;
-  //       session.user.image = token.image as string;
-  //     }
-
-  //     return session;
-  //   },
-  //   async jwt({token}) {
-  //     if(!token.sub) return token;
-
-  //     const existingUser = await db.query.users.findFirst({
-  //       where: eq(users.id, token.sub)
-  //     });
-
-  //     if(!existingUser) return token;
-
-  //     const existingAccount = await db.query.accounts.findFirst({
-  //       where: eq(accounts.userId, existingUser.id)
-  //     });
-
-  //     token.isOAuth = !!existingAccount;
-  //     token.name = existingUser.name;
-  //     token.email = existingUser.email;
-  //     token.role = existingUser.role;
-  //     token.image = existingUser.image;
-
-  //     return token;
-
-  //   }
-
-  // },
   providers: [
     Google({
         clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -67,26 +24,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           params: {
             response_type: "code",
             scope: "login:email login:info",
+            force_confirm: "1",
           },
         },
       }),
-    // Credentials({
-    //   authorize: async (credentials) => {
-    //     const validatedFields = loginSchema.safeParse(credentials)
-
-    //     if (validatedFields.success) {
-    //       const { email, password } = validatedFields.data
-
-    //       const user = await db.query.users.findFirst({
-    //         where: eq(users.email, email),
-    //       })
-    //       if (!user || !user.password) return null
-
-    //       const passwordMatch = await bcrypt.compare(password, user.password)
-    //       if (passwordMatch) return user
-    //     }
-    //     return null
-    //   },
-    // }),
+      
   ],
 })

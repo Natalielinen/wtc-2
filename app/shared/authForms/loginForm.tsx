@@ -33,9 +33,16 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
         resolver: zodResolver(loginFormSchema),
     });
 
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+
     const toggleShowPassword = (isOff: boolean = false) => setShowPassword(isOff);
 
-    const { execute, status } = useAction(emailSignin, {});
+    const { execute, status } = useAction(emailSignin, {
+        onSuccess: (data) => {
+            console.log(data);
+        }
+    });
 
     const onLogin = async (data: LoginFormValues) => {
         execute(data);

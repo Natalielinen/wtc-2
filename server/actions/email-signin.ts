@@ -16,48 +16,19 @@ export const emailSignin = actionClient
   .schema(loginFormSchema)
   .action(async ({ parsedInput: { userEmail: email, userPassword: password } }) => {
 
-    try {
-      const existingUser = await db.query.users.findFirst({
-        where: eq(users.email, email),
-      })
+    const existingUser = await db.query.users.findFirst({ where: eq(users.email, email) });
 
-      if (existingUser?.email !== email) {
-        return { error: "Email not  found" }
-      }
+    if(existingUser?.email !== email) {
+      return { error: 'User not found' };
 
-      if (!existingUser.emailVerified) {
-        const verificationToken = await generateEmailVerificationToken(
-          existingUser.email
-        )
-        await sendVerificationEmail(
-          verificationToken[0].email,
-          verificationToken[0].token
-        )
-        return { success: "Confirmation Email Sent!" }
-      }
+    }
 
-        await signIn('credentials', {
-          email,
-          password,
-          redirectTo: '/'
-        })
+    // if(!existingUser.emailVerified) {
+    //   return { error: 'Email not verified' };
+    // }
 
-        return { success: 'Login successful' };
 
-        } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case "CredentialsSignin":
-            return { error: "Email or Password Incorrect" }
-          case "AccessDenied":
-            return { error: error.message }
-          case "OAuthSignInError":
-            return { error: error.message }
-          default:
-            return { error: "Something went wrong" }
-        }
-      }
-      throw error
-        }
+    console.log(email, password);
+    return {success: "success"}
 
   });

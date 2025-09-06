@@ -48,3 +48,20 @@ import {
       },
     ]
   );
+
+export const emailTokens = pgTable(
+  "email_tokens",
+  {
+    id: text("identifier").notNull().primaryKey().$defaultFn(() => createId()),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+    email: text("email").notNull(),
+  },
+  (verificationToken) => [
+    {
+      compositePk: primaryKey({
+        columns: [verificationToken.id, verificationToken.token],
+      }),
+    },
+  ]
+)

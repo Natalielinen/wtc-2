@@ -6,7 +6,7 @@ import Yandex from "next-auth/providers/yandex";
  
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
-  secret: process.env.AUTH_SECRET!,
+  secret: process.env.NEXTAUTH_SECRET!,
   session: {
     strategy: "jwt",
   },

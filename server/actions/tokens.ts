@@ -3,27 +3,26 @@
 import { db } from "@/server";
 import { eq } from "drizzle-orm";
 //import { emailTokens, passwordResetTokens, users } from "../schema";
-import { emailTokens } from "../schema";
+import { emailTokens, users } from "../schema";
 
-export const gerVerificationTokenByEmail = async (email: string) => {
+export const getVerificationTokenByEmail = async (email: string) => {
   try {
     const verificationToken = await db.query.emailTokens.findFirst({
-      where: eq(emailTokens.id, email),
-    });
-
-    return verificationToken;
+      where: eq(emailTokens.token, email),
+    })
+    return verificationToken
   } catch (error) {
-    console.error(error);
-    return null;
+    console.log(error)
+    return null
   }
-};
+}
 
 export const generateEmailVerificationToken = async (email: string) => {
   const token = crypto.randomUUID();
 
   const expires = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
-  const existingToken = await gerVerificationTokenByEmail(email);
+  const existingToken = await getVerificationTokenByEmail(email);
 
   if (existingToken) {
     await db.delete(emailTokens).where(eq(emailTokens.id, email));
@@ -41,33 +40,33 @@ export const generateEmailVerificationToken = async (email: string) => {
   return verificationToken;
 };
 
-// export const newVerification = async (token: string) => {
-//   const existingToken = await gerVerificationTokenByEmail(token);
+export const newVerification = async (token: string) => {
+  const existingToken = await getVerificationTokenByEmail(token);
 
-//   if (!existingToken) return { error: "Token not found" };
+  if (!existingToken) return { error: "Token not found" };
 
-//   const hasExpired = new Date(existingToken.expires) < new Date();
+  const hasExpired = new Date(existingToken.expires) < new Date();
 
-//   if (hasExpired) return { error: "Token has expired" };
+  if (hasExpired) return { error: "Token has expired" };
 
-//   const existingUser = await db.query.users.findFirst({
-//     where: eq(users.email, existingToken.email),
-//   });
+  const existingUser = await db.query.users.findFirst({
+    where: eq(users.email, existingToken.email),
+  });
 
-//   if (!existingUser) return { error: "User not found" };
+  if (!existingUser) return { error: "User not found" };
 
-//   await db
-//     .update(users)
-//     .set({
-//       emailVerified: new Date(),
-//       email: existingToken.email,
-//     })
-//     .where(eq(users.email, existingToken.email));
+  await db
+    .update(users)
+    .set({
+      emailVerified: new Date(),
+      email: existingToken.email,
+    })
+   .where(eq(users.email, existingToken.email));
 
-//   await db.delete(emailTokens).where(eq(emailTokens.id, existingToken.id));
+  await db.delete(emailTokens).where(eq(emailTokens.id, existingToken.id));
 
-//   return { success: "Email verified" };
-// };
+  return { success: "Email verified" };
+};
 
 // export const getPasswordResetTokenByToken = async (token: string) => {
 //   try {

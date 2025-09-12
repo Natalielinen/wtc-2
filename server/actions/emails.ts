@@ -5,7 +5,7 @@ import nodemailer from "nodemailer";
 
 const domain = getBaseUrl();
 export const sentVerificationEmail = async (email: string, token: string) => {
-  const confirmLink = `${domain}/api/auth/verify?token=${token}`;
+  const confirmLink = `${domain}/auth/verify?token=${token}`;
 
   const transporter = nodemailer.createTransport({
     host: "smtp.yandex.com",

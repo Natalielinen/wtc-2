@@ -3,7 +3,12 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/server";
 import Google from "next-auth/providers/google";
 import Yandex from "next-auth/providers/yandex";
- 
+import CredentialsProvider from "next-auth/providers/credentials";
+import { loginFormSchema } from "@/app/shared/schemas/loginFormSchema";
+import { eq } from "drizzle-orm";
+import { users } from "./schema";
+import bcrypt from "bcrypt";
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   secret: process.env.NEXTAUTH_SECRET!,
@@ -12,22 +17,45 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   providers: [
     Google({
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        allowDangerousEmailAccountLinking: true
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
     Yandex({
-        clientId: process.env.YANDEX_CLIENT_ID!,
-        clientSecret: process.env.YANDEX_CLIENT_SECRET!,
-        authorization: {
-          url: "https://oauth.yandex.ru/authorize",
-          params: {
-            response_type: "code",
-            scope: "login:email login:info",
-            force_confirm: "1",
-          },
+      clientId: process.env.YANDEX_CLIENT_ID!,
+      clientSecret: process.env.YANDEX_CLIENT_SECRET!,
+      authorization: {
+        url: "https://oauth.yandex.ru/authorize",
+        params: {
+          response_type: "code",
+          scope: "login:email login:info",
+          force_confirm: "1",
         },
-      }),
-      
+      },
+    }),
+    CredentialsProvider({
+      authorize: async (credentials) => {
+        const validatedFields = loginFormSchema.safeParse(credentials);
+
+        if (validatedFields.success) {
+          const user = await db.query.users.findFirst({
+            where: eq(users.email, validatedFields.data.email),
+          });
+
+          if (!user || !user.password) return null;
+
+          const passwordMatch = await bcrypt.compare(
+            validatedFields.data.password,
+            user.password
+          );
+
+          if (passwordMatch) {
+            return user;
+          }
+
+          return null;
+        }
+      },
+    }),
   ],
-})
+});

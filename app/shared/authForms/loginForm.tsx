@@ -6,12 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from "@/components/ui/button";
 import { FormInput } from "../formFields";
 import toast from "react-hot-toast";
-import { useUserStore } from "@/app/stores/userStore";
-import { Item } from "@/app/types";
-import { signIn } from "next-auth/react";
 import { SocialButtons } from "./socialButtons";
 import { Eye, EyeOff } from "lucide-react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { emailSignin } from "@/server/actions/email-signin";
@@ -21,26 +18,28 @@ interface LoginForm {
 }
 
 export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
-    const setUser = useUserStore((state) => state.setCurrentUser);
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const form = useForm<LoginFormValues>({
         defaultValues: {
-            userEmail: '',
-            userPassword: '',
+            email: '',
+            password: '',
         },
         resolver: zodResolver(loginFormSchema),
     });
-
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
 
     const toggleShowPassword = (isOff: boolean = false) => setShowPassword(isOff);
 
     const { execute, status } = useAction(emailSignin, {
         onSuccess: (data) => {
-            console.log(data);
+            if (data?.data?.error) {
+                toast.error(data.data.error, { duration: 5000 });
+            }
+            if (data?.data?.success) {
+                toast.success(data.data.success, { duration: 5000 });
+                onAuthModalClose();
+            }
         }
     });
 
@@ -52,9 +51,9 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
         <FormProvider {...form}>
             <form className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit(onLogin)}>
 
-                <FormInput name="userEmail" placeholder="Почта" type="email" autoComplete="email" />
+                <FormInput name="email" placeholder="Почта" type="email" autoComplete="email" />
                 <FormInput
-                    name="userPassword"
+                    name="password"
                     placeholder="Пароль"
                     type={showPassword ? "text" : "password"}
                     icon={!showPassword

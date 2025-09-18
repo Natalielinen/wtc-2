@@ -2,7 +2,6 @@ import { auth } from "@/server/auth";
 import { Filters, Header, ItemsList } from "./shared";
 
 export default async function Home() {
-
   const session = await auth();
 
   return (
@@ -11,6 +10,5 @@ export default async function Home() {
       <Filters />
       <ItemsList session={session} />
     </div>
-
   );
 }

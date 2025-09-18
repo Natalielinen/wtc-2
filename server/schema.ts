@@ -1,58 +1,81 @@
 import {
-    timestamp,
-    pgTable,
-    text,
-    primaryKey,
-    integer,
-    pgEnum,
-  } from "drizzle-orm/pg-core"
-  import type { AdapterAccountType } from "next-auth/adapters";
-  import { createId } from "@paralleldrive/cuid2";
-  
-  export const RoleEnum = pgEnum("roles", ["user", "admin"]);
-  
-  export const users = pgTable("user", {
-    id: text("id").notNull()
-      .primaryKey()
-      .$defaultFn(() => createId()),
-    name: text("name"),
-    email: text("email").unique(),
-    password: text("password"),
-    emailVerified: timestamp("emailVerified", { mode: "date" }),
-    image: text("image"),
-    role: RoleEnum("roles").default("user"),
-  });
-   
-  export const accounts = pgTable(
-    "account",
+  timestamp,
+  pgTable,
+  text,
+  primaryKey,
+  integer,
+  pgEnum,
+} from "drizzle-orm/pg-core";
+import type { AdapterAccountType } from "next-auth/adapters";
+import { createId } from "@paralleldrive/cuid2";
+import { relations } from "drizzle-orm";
+
+export const RoleEnum = pgEnum("roles", ["user", "admin"]);
+
+export const users = pgTable("user", {
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text("name"),
+  email: text("email").unique(),
+  password: text("password"),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+  role: RoleEnum("roles").default("user"),
+});
+
+export const userItems = pgTable("userItems", {
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  genre: text("genre").notNull(),
+  imageUrl: text("imageUrl").notNull(),
+  lastVisited: timestamp("lastVisited", { mode: "date" })
+    .defaultNow()
+    .notNull(),
+  sourceLink: text("sourceLink").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+});
+
+export const accounts = pgTable(
+  "account",
+  {
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccountType>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
+  },
+  (account) => [
     {
-      userId: text("userId")
-        .notNull()
-        .references(() => users.id, { onDelete: "cascade" }),
-      type: text("type").$type<AdapterAccountType>().notNull(),
-      provider: text("provider").notNull(),
-      providerAccountId: text("providerAccountId").notNull(),
-      refresh_token: text("refresh_token"),
-      access_token: text("access_token"),
-      expires_at: integer("expires_at"),
-      token_type: text("token_type"),
-      scope: text("scope"),
-      id_token: text("id_token"),
-      session_state: text("session_state"),
+      compoundKey: primaryKey({
+        columns: [account.provider, account.providerAccountId],
+      }),
     },
-    (account) => [
-      {
-        compoundKey: primaryKey({
-          columns: [account.provider, account.providerAccountId],
-        }),
-      },
-    ]
-  );
+  ]
+);
 
 export const emailTokens = pgTable(
   "email_tokens",
   {
-    id: text("identifier").notNull().primaryKey().$defaultFn(() => createId()),
+    id: text("identifier")
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => createId()),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
     email: text("email").notNull(),
@@ -64,4 +87,15 @@ export const emailTokens = pgTable(
       }),
     },
   ]
-)
+);
+
+export const userRelations = relations(users, ({ many }) => ({
+  userItems: many(userItems),
+}));
+
+export const userItemRelations = relations(userItems, ({ one }) => ({
+  user: one(users, {
+    fields: [userItems.userId],
+    references: [users.id],
+  }),
+}));

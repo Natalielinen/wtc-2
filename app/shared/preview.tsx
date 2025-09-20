@@ -71,8 +71,8 @@ export const Preview = ({ item }: PreviewProps) => {
             openAddModal={show}
             setShow={setShow}
             editValues={{
-                category: item.category,
-                genre: item.genre,
+                category: item.category || "все",
+                genre: item.genre || "все",
                 sourceLink: item.sourceLink,
                 name: item.name,
                 imageUrl: item.imageUrl
@@ -83,7 +83,7 @@ export const Preview = ({ item }: PreviewProps) => {
         />
 
         <ConfirmDeleteModal
-            id={item.id}
+            id={item.id || ""}
             name={item.name}
             openDeleteModal={showDeleteModal}
             setShow={setShowDeleteModal}

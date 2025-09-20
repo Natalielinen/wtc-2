@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
 import { Session } from "next-auth";
 import { getUserItems } from "@/server/actions/user-items";
+import { Item } from "../types";
 
 export const ItemsList = ({ session }: { session: Session | null }) => {
     // Данные и состояние
@@ -13,14 +14,14 @@ export const ItemsList = ({ session }: { session: Session | null }) => {
 
     const openLoginModal = () => setOpenLoginModal(true);
 
-    const [userItems, setUserItems] = React.useState<any[]>([]);
+    const [items, setItems] = React.useState<Item[]>([]);
 
     const fetchItems = async () => {
         if (!session) {
             return;
         } else {
             const items = await getUserItems(session?.user?.id || "");
-            setUserItems(items);
+            setItems(items);
         }
     };
 
@@ -32,8 +33,8 @@ export const ItemsList = ({ session }: { session: Session | null }) => {
     // UI
     return session ? (
         <div className="grid grid-cols-3 gap-4 sm:grid-cols-4">
-            {userItems.length > 0 &&
-                userItems.map((item) => <Preview key={item.id} item={item} />)}
+            {items.length > 0 &&
+                items.map((item) => <Preview key={item.id} item={item} />)}
         </div>
     ) : (
         <p>

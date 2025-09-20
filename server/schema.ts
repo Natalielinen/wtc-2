@@ -11,6 +11,8 @@ import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
 
 export const RoleEnum = pgEnum("roles", ["user", "admin"]);
+export const GenreEnum = pgEnum("genres", ["все", "мультфильм", "боевик", "детектив", "драма", "мьюзикл", "семейный", "триллер", "ужасы", "фантастика", "фэнтези"]);
+export const CategoriesEnum = pgEnum("categories", ["все", "фильмы", "игры", "книги"]);
 
 export const users = pgTable("user", {
   id: text("id")
@@ -31,8 +33,8 @@ export const userItems = pgTable("userItems", {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text("name").notNull(),
-  category: text("category").notNull(),
-  genre: text("genre").notNull(),
+  category: CategoriesEnum("categories").default("все"),
+  genre: GenreEnum("genres").default("все"),
   imageUrl: text("imageUrl").notNull(),
   lastVisited: timestamp("lastVisited", { mode: "date" })
     .defaultNow()

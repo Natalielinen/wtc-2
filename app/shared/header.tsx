@@ -17,7 +17,6 @@ import { useUserStore } from "../stores/userStore";
 import toast from "react-hot-toast";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
-import Image from "next/image";
 
 export const Header = ({ session }: { session: Session | null }) => {
     // Данные и состояние

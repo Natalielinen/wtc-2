@@ -5,28 +5,17 @@ import { useUserStore } from "../stores/userStore";
 import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
 import { Session } from "next-auth";
-import { getUserItems } from "@/server/actions/user-items";
-import { Item } from "../types";
+import { useItemsStore } from "../stores/items-store";
 
 export const ItemsList = ({ session }: { session: Session | null }) => {
     // Данные и состояние
     const { setOpenLoginModal } = useUserStore((state) => state);
+    const { items, fetchItems } = useItemsStore((state) => state);
 
     const openLoginModal = () => setOpenLoginModal(true);
 
-    const [items, setItems] = React.useState<Item[]>([]);
-
-    const fetchItems = async () => {
-        if (!session) {
-            return;
-        } else {
-            const items = await getUserItems(session?.user?.id || "");
-            setItems(items);
-        }
-    };
-
     useEffect(() => {
-        fetchItems();
+        fetchItems(session?.user?.id || "");
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [session]);
 

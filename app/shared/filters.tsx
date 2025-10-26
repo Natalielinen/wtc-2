@@ -1,116 +1,120 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-'use client';
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { ClockArrowDown } from "lucide-react"
-import { useState } from "react"
-import { categories, genres } from "../constants/options";
-import { useUserStore } from "../stores/userStore";
-import { getUsetItems } from "@/lib/getItems";
+} from "@/components/ui/select";
+import { ClockArrowDown } from "lucide-react";
+import { useState } from "react";
 import { Category, Genre } from "../types";
+import { CategoriesEnum, GenreEnum } from "@/server/schema";
+import { useItemsStore } from "../stores/items-store";
+import { filterItems } from "@/server/actions/filter-items";
 
-type BtnVariant = "outline" | "link" | "default" | "destructive" | "secondary" | "ghost" | null | undefined
+type BtnVariant =
+    | "outline"
+    | "link"
+    | "default"
+    | "destructive"
+    | "secondary"
+    | "ghost"
+    | null
+    | undefined;
 
 export const Filters = () => {
     // Данные и состояние
-    const [btnVariant, setBtnVariant] = useState<BtnVariant>("outline")
-    const [sorted, setSorted] = useState<boolean>(false)
+    const [btnVariant, setBtnVariant] = useState<BtnVariant>("outline");
+    const [sortByLastVisited, setSortByLastVisited] = useState(false);
+    const [selectedGenre, setSelectedGenre] = useState<Genre>(
+        GenreEnum.enumValues[0]
+    );
 
-    const user = useUserStore((state) => state.currentUser);
-    const setUser = useUserStore((state) => state.setCurrentUser);
+    const [selectedCategory, setSelectedCategory] = useState<Category>(
+        CategoriesEnum.enumValues[0]
+    );
 
-    // Получение и обработка данных
-    const onLongTimeNoWatch = async () => {
+    const { setItems } = useItemsStore((state) => state);
+
+    const handleSortToggle = async () => {
         if (btnVariant === "outline") {
             setBtnVariant("default");
-            setSorted(true);
+            setSortByLastVisited(true);
         } else {
             setBtnVariant("outline");
-            setSorted(false);
+            setSortByLastVisited(false);
         }
+        const newSortState = !sortByLastVisited;
+        setSortByLastVisited(newSortState);
 
-        const filteredItems = await getUsetItems({
-            userId: user?.id || '',
-            sortByDate: sorted
-        });
-
-        // Сохраняем пользователя в Zustand
-        // @ts-ignore
-        setUser({ ...user, userItems: filteredItems, });
-
-    }
+        const filtered = await filterItems(
+            selectedCategory,
+            selectedGenre,
+            newSortState
+        );
+        setItems(filtered);
+    };
 
     const onGenreChange = async (genre: Genre) => {
+        setSelectedGenre(genre);
 
         if (genre) {
-            const filteredItems = await getUsetItems({
-                userId: user?.id || '',
-                genre
-            });
+            const filteredItems = await filterItems(selectedCategory, genre);
 
-            // Сохраняем пользователя в Zustand
-            // @ts-ignore
-            setUser({ ...user, userItems: filteredItems, });
+            setItems(filteredItems);
         }
-
-    }
+    };
 
     const onCategoryChange = async (category: Category) => {
+        setSelectedCategory(category);
 
         if (category) {
-            const filteredItems = await getUsetItems({
-                userId: user?.id || '',
-                category
-            });
+            const filteredItems = await filterItems(category, selectedGenre);
 
-            // Сохраняем пользователя в Zustand
-            // @ts-ignore
-            setUser({ ...user, userItems: filteredItems, });
+            setItems(filteredItems);
         }
+    };
 
-    }
+    return (
+        <div className="flex justify-between my-8">
+            <div className="flex gap-4">
+                <Select onValueChange={onGenreChange}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Жанр" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {GenreEnum.enumValues.map((genre) => (
+                            <SelectItem key={genre} value={genre}>
+                                {genre}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
 
-    return <div className="flex justify-between my-8">
-        <div className="flex gap-4" >
-            <Select onValueChange={onGenreChange}>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Жанр" />
-                </SelectTrigger>
-                <SelectContent>
-                    {
-                        genres.map(genre => <SelectItem key={genre} value={genre}>{genre}</SelectItem>)
-                    }
-                </SelectContent>
-            </Select>
+                <Select onValueChange={onCategoryChange}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Категория" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {CategoriesEnum.enumValues.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                                {cat}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
 
-            <Select onValueChange={onCategoryChange}>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Категория" />
-                </SelectTrigger>
-                <SelectContent>
-                    {
-                        categories.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)
-                    }
-                </SelectContent>
-            </Select>
-
-        </div >
-
-
-        <Button
-            title="Давно не смотрел(а)"
-            variant={btnVariant}
-            onClick={onLongTimeNoWatch}
-        >
-            <ClockArrowDown />
-        </Button>
-    </div >
-
-}
+            <Button
+                title="Давно не смотрел(а)"
+                variant={btnVariant}
+                onClick={handleSortToggle}
+            >
+                <ClockArrowDown />
+            </Button>
+        </div>
+    );
+};

@@ -15,9 +15,9 @@ import { AddItemFormValues, addItemSchema } from "./schemas/addItemFormSchema";
 import { SearchInput } from "./serchInput";
 import { Category, Genre, Item } from "../types";
 import toast from "react-hot-toast";
-import { categories, genres } from "../constants/options";
+import { CategoriesEnum, GenreEnum } from "@/server/schema";
 import { addItem } from "@/server/actions/add-item";
-import { GenreEnum } from "@/server/schema";
+import { editItem } from "@/server/actions/edit-item";
 
 type AddItemModalProps = {
     editMode?: boolean;
@@ -38,8 +38,8 @@ export const AddItemModal = ({
         defaultValues: editMode
             ? editValues
             : {
-                category: categories[0],
-                genre: genres[0],
+                category: CategoriesEnum.enumValues[0],
+                genre: GenreEnum.enumValues[0],
                 name: "",
                 sourceLink: "",
                 imageUrl: "",
@@ -81,8 +81,17 @@ export const AddItemModal = ({
                     return;
                 }
 
-                //edit item
-                toast.success("Элемент успешно обновлен");
+                editItem({
+                    id: itemId,
+                    imageUrl: data.imageUrl || "",
+                    name: data.name,
+                    sourceLink: data.sourceLink,
+                    category: data.category as Category,
+                    genre: data.genre as Genre,
+                }).then((res) => {
+                    toast.success(res.success);
+                    setShow(false);
+                });
             } catch (error) {
                 toast.error(`Ошибка при обновлении элемента: ${error}`);
                 throw error;
@@ -106,7 +115,10 @@ export const AddItemModal = ({
                                 className="flex flex-col gap-4 mt-4"
                                 onSubmit={form.handleSubmit(onSubmit)}
                             >
-                                <FormSelect name="category" options={categories} />
+                                <FormSelect
+                                    name="category"
+                                    options={CategoriesEnum.enumValues as string[]}
+                                />
                                 <FormSelect
                                     name="genre"
                                     options={GenreEnum.enumValues as string[]}

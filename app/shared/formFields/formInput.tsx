@@ -10,6 +10,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     required?: boolean;
     className?: string;
+    icon?: React.ReactNode;
 }
 
 export const FormInput: React.FC<Props> = (
@@ -18,6 +19,7 @@ export const FormInput: React.FC<Props> = (
         name,
         label,
         required = false,
+        icon = null,
         ...props
 
     }) => {
@@ -45,6 +47,7 @@ export const FormInput: React.FC<Props> = (
                 {...register(name)}
                 {...props} />
 
+            {icon && <div className="absolute right-10 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 cursor-pointer">{icon}</div>}
             {value && <ClearButton onClick={() => setValue(name, '')} />}
 
         </div>

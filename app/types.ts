@@ -1,17 +1,11 @@
+import { CategoriesEnum, GenreEnum, userItems } from "@/server/schema";
+import { InferInsertModel } from "drizzle-orm";
 
-export type Genre = 'все' | 'ужасы' | 'фэнтези' | 'мультфильм' | 'фантастика' | 'комедия' | 'семейный' | 'драма' | 'боевик' | 'триллер' | 'мьюзикл' | "детектив";
+// тип = union из элементов массива
+export type Genre = (typeof GenreEnum.enumValues)[number];
+export type Category = (typeof CategoriesEnum.enumValues)[number];
 
-export type Category = 'все' | 'фильмы' | 'игры';
-
-export type Item = {
-    id: string;
-    category: Category;
-    genre: Genre;
-    sourceLink: string;
-    name: string;
-    imageUrl?: string;
-    lastVisited?: Date;
-}
+export type Item = InferInsertModel<typeof userItems>
 
 // то что отправляется на бек
 export type ItemFields = {

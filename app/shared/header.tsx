@@ -14,21 +14,20 @@ import { useState } from "react";
 import { AddItemModal } from "./addItemModal";
 import { LoginModal } from "./loginModal";
 import { useUserStore } from "../stores/userStore";
-import { signOut } from "@firebase/auth";
-import { auth } from "../constants/firebaseConfig";
 import toast from "react-hot-toast";
+import { signOut } from "next-auth/react";
+import { Session } from "next-auth";
 
-export const Header = () => {
+export const Header = ({ session }: { session: Session | null }) => {
     // Данные и состояние
-    const { currentUser: user, setOpenLoginModal } = useUserStore((state) => state);
+    const { setOpenLoginModal } = useUserStore((state) => state);
     const { setTheme, theme } = useTheme();
     const [showModal, setShowModal] = useState<boolean>(false);
 
     // Получение и обработка данных
     const logout = async () => {
         try {
-            await signOut(auth);
-            useUserStore.getState().logout();
+            signOut();
             toast.success("Вы вышли из аккаунта");
         } catch (error) {
             console.error("Error [LOGOUT]", error);
@@ -42,7 +41,7 @@ export const Header = () => {
     };
 
     const onLoginClick = () => {
-        if (!user) {
+        if (!session) {
             setOpenLoginModal(true);
         } else {
             logout();
@@ -53,13 +52,13 @@ export const Header = () => {
     return <header className="flex justify-between mb-8">
         <div className="flex gap-4">
             <Link href="/chooseMovie">
-                <Button variant="outline" disabled={!user}>
+                <Button variant="outline" disabled={!session}>
                     <Clapperboard />
                 </Button>
             </Link>
 
             <Link href="/chooseGame">
-                <Button variant="outline" disabled={!user}>
+                <Button variant="outline" disabled={!session}>
                     <Gamepad2 />
                 </Button>
             </Link>
@@ -67,8 +66,12 @@ export const Header = () => {
 
         <div>
             <DropdownMenu >
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger className="flex gap-2">
+                    {
+                        session ? <p>{session?.user?.name}</p> : null
+                    }
                     <Settings />
+                    {/* <Image src={session?.user?.image || ''} alt="avatar" width={30} height={30} /> */}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuItem onClick={onThemeChange} className="cursor-pointer">
@@ -79,7 +82,7 @@ export const Header = () => {
                         }
                     </DropdownMenuItem>
                     {
-                        user && <>
+                        session && <>
                             <DropdownMenuItem className="cursor-pointer">
                                 <Link href="/profile">
                                     Профиль
@@ -88,7 +91,7 @@ export const Header = () => {
                             <DropdownMenuItem className="cursor-pointer" onClick={() => setShowModal(true)}>Добавить</DropdownMenuItem>
                         </>
                     }
-                    <DropdownMenuItem className="cursor-pointer" onClick={onLoginClick}>{user ? 'Выйти' : 'Войти'}</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer" onClick={onLoginClick}>{session ? 'Выйти' : 'Войти'}</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

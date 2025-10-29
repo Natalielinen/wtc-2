@@ -6,8 +6,6 @@ import { Pencil, Play, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { doc, updateDoc } from "@firebase/firestore";
-import { db } from "../constants/firebaseConfig";
 import React from "react";
 
 const AddItemModal = React.lazy(() => import("./addItemModal"))
@@ -28,11 +26,6 @@ export const Preview = ({ item }: PreviewProps) => {
             if (!item.id) {
                 return;
             }
-            const itemRef = doc(db, "item", item.id);
-            await updateDoc(itemRef, {
-                ...item,
-                lastVisited: new Date(),
-            });
 
         } catch (error) {
             toast.error(`Ошибка при обновлении элемента: ${error}`);
@@ -78,8 +71,8 @@ export const Preview = ({ item }: PreviewProps) => {
             openAddModal={show}
             setShow={setShow}
             editValues={{
-                category: item.category,
-                genre: item.genre,
+                category: item.category || "все",
+                genre: item.genre || "все",
                 sourceLink: item.sourceLink,
                 name: item.name,
                 imageUrl: item.imageUrl
@@ -90,7 +83,7 @@ export const Preview = ({ item }: PreviewProps) => {
         />
 
         <ConfirmDeleteModal
-            id={item.id}
+            id={item.id || ""}
             name={item.name}
             openDeleteModal={showDeleteModal}
             setShow={setShowDeleteModal}

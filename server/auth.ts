@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import NextAuth from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/server";
@@ -34,6 +35,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
     CredentialsProvider({
+      //@ts-ignore
       authorize: async (credentials) => {
         const validatedFields = loginFormSchema.safeParse(credentials);
 

@@ -17,6 +17,7 @@ export async function filterItems(category?: string, genre?: string, sortByLastV
 
   if (category === "все" && genre === "все") {
     return await db.query.userItems.findMany({
+      where: eq(userItems.userId, session.user.id),
       orderBy: sortByLastVisited ? [desc(userItems.lastVisited)] : undefined,
     });
   }

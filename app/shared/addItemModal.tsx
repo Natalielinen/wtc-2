@@ -99,6 +99,8 @@ export const AddItemModal = ({
                 setShow(false);
             }
         }
+
+        form.reset();
     };
 
     return (

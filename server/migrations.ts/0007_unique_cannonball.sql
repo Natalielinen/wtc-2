@@ -1,0 +1,1 @@
+ALTER TABLE "userItems" ADD COLUMN "watCount" integer DEFAULT 0;

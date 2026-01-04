@@ -50,6 +50,20 @@
       "when": 1758387363813,
       "tag": "0006_small_dark_phoenix",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1767527533366,
+      "tag": "0007_unique_cannonball",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1767528115971,
+      "tag": "0008_pink_hercules",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "userItems" RENAME COLUMN "watCount" TO "watchCount";

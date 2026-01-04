@@ -8,6 +8,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import React from "react";
 import { format } from "date-fns";
+import { editItem } from "@/server/actions/edit-item";
 
 const AddItemModal = React.lazy(() => import("./addItemModal"))
 const ConfirmDeleteModal = React.lazy(() => import("./confirmDeleteModal"))
@@ -27,6 +28,12 @@ export const Preview = ({ item }: PreviewProps) => {
             if (!item.id) {
                 return;
             }
+
+            editItem({
+                id: item.id,
+                lastVisited: new Date(),
+                watCount: item.watCount || 0 + 1
+            })
 
         } catch (error) {
             toast.error(`Ошибка при обновлении элемента: ${error}`);
@@ -48,7 +55,8 @@ export const Preview = ({ item }: PreviewProps) => {
                     <div className="bg-black bg-opacity-50 p-4 flex justify-between">
                         <p>
                             <p>{item.name}</p>
-                            <p> Просмотрен: {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}</p>
+                            <p> Дата: {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}</p>
+                            <p> Просмотрен {item.watCount} раз</p>
                         </p>
                         <Button variant="ghost" onClick={() => setShow(true)}>
                             <Pencil />

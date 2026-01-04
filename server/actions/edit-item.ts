@@ -7,7 +7,7 @@ import { Item } from "@/app/types";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
-export async function editItem(data: Omit<Item, "userId" | "lastVisited">) {
+export async function editItem(data: Partial<Item>) {
   const session = await auth();
 
   if (!session?.user?.id) {

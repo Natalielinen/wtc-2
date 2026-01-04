@@ -40,6 +40,7 @@ export const userItems = pgTable("userItems", {
     .defaultNow()
     .notNull(),
   sourceLink: text("sourceLink").notNull(),
+  watCount: integer("watCount").default(0),
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

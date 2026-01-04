@@ -3,7 +3,7 @@
 import { db } from "..";
 import { userItems } from "../schema";
 import { auth } from "../auth";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, asc } from "drizzle-orm";
 
 type Genre = typeof userItems.genre.enumValues[number];
 type Category = typeof userItems.category.enumValues[number];
@@ -18,7 +18,7 @@ export async function filterItems(category?: string, genre?: string, sortByLastV
   if (category === "все" && genre === "все") {
     return await db.query.userItems.findMany({
       where: eq(userItems.userId, session.user.id),
-      orderBy: sortByLastVisited ? [desc(userItems.lastVisited)] : undefined,
+      orderBy: sortByLastVisited ? [asc(userItems.lastVisited)] : undefined,
     });
   }
 

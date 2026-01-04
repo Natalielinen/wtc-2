@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import React from "react";
+import { format } from "date-fns";
 
 const AddItemModal = React.lazy(() => import("./addItemModal"))
 const ConfirmDeleteModal = React.lazy(() => import("./confirmDeleteModal"))
@@ -42,11 +43,12 @@ export const Preview = ({ item }: PreviewProps) => {
                 alt={item.name}
                 className="rounded-2xl cursor-pointer w-full h-[200px] object-cover"
             />
-            <div className=" absolute top-full left-0 w-full h-full bg-gray-500 bg-opacity-50 z-10 rounded-2xl cursor-pointer transition-all duration-500 ease-in-out group-hover:top-0">
+            <div className="absolute top-full left-0 w-full h-full bg-gray-500 bg-opacity-50 z-10 rounded-2xl cursor-pointer transition-all duration-500 ease-in-out group-hover:top-0">
                 <div className="text-white  h-[100%] flex flex-col gap-8">
-                    <div className="bg-black bg-opacity-50 p-4 flex justify-between ">
+                    <div className="bg-black bg-opacity-50 p-4 flex justify-between">
                         <p>
                             <p>{item.name}</p>
+                            <p> Просмотрен: {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}</p>
                         </p>
                         <Button variant="ghost" onClick={() => setShow(true)}>
                             <Pencil />

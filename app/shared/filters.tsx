@@ -14,6 +14,7 @@ import { Category, Genre } from "../types";
 import { CategoriesEnum, GenreEnum } from "@/server/schema";
 import { useItemsStore } from "../stores/items-store";
 import { filterItems } from "@/server/actions/filter-items";
+import { SearchInputFilters } from "./search-item-filters";
 
 type BtnVariant =
     | "outline"
@@ -107,6 +108,8 @@ export const Filters = () => {
                     </SelectContent>
                 </Select>
             </div>
+
+            <SearchInputFilters />
 
             <Button
                 title="Давно не смотрел(а)"

@@ -12,7 +12,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { AddItemFormValues, addItemSchema } from "./schemas/addItemFormSchema";
-import { SearchInput } from "./serchInput";
+import { SearchInput } from "./serch-modal-Input";
 import { Category, Genre, Item } from "../types";
 import toast from "react-hot-toast";
 import { CategoriesEnum, GenreEnum } from "@/server/schema";

@@ -64,6 +64,13 @@
       "when": 1767528115971,
       "tag": "0008_pink_hercules",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1768039548552,
+      "tag": "0009_flawless_firebird",
+      "breakpoints": true
     }
   ]
 }

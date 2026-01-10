@@ -44,6 +44,7 @@ export const userItems = pgTable("userItems", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),  
 });
 
 export const accounts = pgTable(

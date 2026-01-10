@@ -1,0 +1,1 @@
+ALTER TABLE "userItems" ADD COLUMN "createdAt" timestamp DEFAULT now() NOT NULL;

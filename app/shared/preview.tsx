@@ -59,7 +59,7 @@ export const Preview = ({ item }: PreviewProps) => {
                                 <p>{item.name}</p>
                                 <p>
                                     {" "}
-                                    Дата: {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}
+                                    Дата просмотра: {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}
                                 </p>
                                 <p> Просмотрен {item.watchCount} раз</p>
                             </p>

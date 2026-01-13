@@ -5,24 +5,42 @@ import { userItems } from "../schema";
 import { auth } from "../auth";
 import { eq, and, desc, asc } from "drizzle-orm";
 
-type Genre = typeof userItems.genre.enumValues[number];
-type Category = typeof userItems.category.enumValues[number];
+type Genre = (typeof userItems.genre.enumValues)[number];
+type Category = (typeof userItems.category.enumValues)[number];
 
-export async function filterItems(category?: string, genre?: string, sortByLastVisited = false) {
+export async function filterItems(
+  category?: string,
+  genre?: string,
+  sortByLastVisited = false,
+  sortByPopular = false
+) {
   const session = await auth();
 
   if (!session?.user?.id) {
     throw new Error("Not authorized");
   }
 
+  const order = () => {
+    console.log(sortByLastVisited, sortByPopular);
+    if (sortByLastVisited) {
+      return [asc(userItems.lastVisited)];
+    } 
+    if(sortByPopular) {
+      return [desc(userItems.watchCount)];
+    }
+    return [desc(userItems.createdAt)];
+  };
+
   if (category === "все" && genre === "все") {
     return await db.query.userItems.findMany({
       where: eq(userItems.userId, session.user.id),
-      orderBy: sortByLastVisited ? [asc(userItems.lastVisited)] : undefined,
+      orderBy: order(),
     });
   }
 
-  const isCategory = userItems.category.enumValues.includes(category as Category);
+  const isCategory = userItems.category.enumValues.includes(
+    category as Category
+  );
   const isGenre = userItems.genre.enumValues.includes(genre as Genre);
 
   let whereClause;

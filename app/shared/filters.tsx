@@ -8,7 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { ClockArrowDown } from "lucide-react";
+import { ClockArrowDown, Trophy } from "lucide-react";
 import { useState } from "react";
 import { Category, Genre } from "../types";
 import { CategoriesEnum, GenreEnum } from "@/server/schema";
@@ -29,7 +29,9 @@ type BtnVariant =
 export const Filters = () => {
     // Данные и состояние
     const [btnVariant, setBtnVariant] = useState<BtnVariant>("outline");
+    const [popularBtnVariant, setPopularBtnVariant] = useState<BtnVariant>("outline");
     const [sortByLastVisited, setSortByLastVisited] = useState(false);
+    const [sortByPopular, setSortByPopular] = useState(false);
     const [selectedGenre, setSelectedGenre] = useState<Genre>(
         GenreEnum.enumValues[0]
     );
@@ -40,24 +42,39 @@ export const Filters = () => {
 
     const { setItems } = useItemsStore((state) => state);
 
-    const handleSortToggle = async () => {
-        if (btnVariant === "outline") {
-            setBtnVariant("default");
-            setSortByLastVisited(true);
-        } else {
-            setBtnVariant("outline");
-            setSortByLastVisited(false);
+    const handleSortToggle = async (sortBy: "lastVisited" | "popular") => {
+        let newSortByLastVisited = sortByLastVisited;
+        let newSortByPopular = sortByPopular;
+
+        if (sortBy === "lastVisited") {
+            newSortByLastVisited = !sortByLastVisited;
+            newSortByPopular = false;
+
+            setBtnVariant(newSortByLastVisited ? "default" : "outline");
+            setPopularBtnVariant("outline");
         }
-        const newSortState = !sortByLastVisited;
-        setSortByLastVisited(newSortState);
+
+        if (sortBy === "popular") {
+            newSortByPopular = !sortByPopular;
+            newSortByLastVisited = false;
+
+            setPopularBtnVariant(newSortByPopular ? "default" : "outline");
+            setBtnVariant("outline");
+        }
+
+        setSortByLastVisited(newSortByLastVisited);
+        setSortByPopular(newSortByPopular);
 
         const filtered = await filterItems(
             selectedCategory,
             selectedGenre,
-            newSortState
+            newSortByLastVisited,
+            newSortByPopular
         );
+
         setItems(filtered);
     };
+
 
     const onGenreChange = async (genre: Genre) => {
         setSelectedGenre(genre);
@@ -112,9 +129,18 @@ export const Filters = () => {
             <SearchInputFilters />
 
             <Button
+                title="Самые популярные"
+                variant={popularBtnVariant}
+                onClick={() => handleSortToggle("popular")}
+                className="mr-4"
+            >
+                <Trophy />
+            </Button>
+
+            <Button
                 title="Давно не смотрел(а)"
                 variant={btnVariant}
-                onClick={handleSortToggle}
+                onClick={() => handleSortToggle("lastVisited")}
             >
                 <ClockArrowDown />
             </Button>

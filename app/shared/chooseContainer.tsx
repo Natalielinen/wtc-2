@@ -6,26 +6,37 @@ import Link from "next/link";
 import { Category, Item } from "../types";
 import { useEffect, useState } from "react";
 import { ChoosenItem } from "./choosenItem";
-import { useUserStore } from "../stores/userStore";
 import { useItemsStore } from "../stores/items-store";
+import { Session } from "next-auth";
 
 type ChooseContainerProps = {
     buttonText: string;
     category: Category;
+    session: Session | null;
 };
 
 export const ChooseContainer = ({
     buttonText,
     category,
+    session,
 }: ChooseContainerProps) => {
-    const { items } = useItemsStore((state) => state);
-
+    const { items, fetchItems } = useItemsStore((state) => state);
     const [choosenItem, setChosenItem] = useState<Item | null>(null);
     const [data, setData] = useState<Array<Item>>([]);
 
-    const user = useUserStore((state) => state.currentUser);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => { }, [user?.userItems]);
+    useEffect(() => {
+        fetchItems(session?.user?.id || "");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [session]);
+
+    useEffect(() => {
+        return () => {
+            setData([]);
+            setChosenItem(null);
+        };
+    }, []);
 
     useEffect(() => {
         switch (category) {
@@ -40,9 +51,16 @@ export const ChooseContainer = ({
 
     const onChooseItem = () => {
         const randomIndex = Math.floor(Math.random() * data.length);
+        setLoading(true);
 
         setChosenItem(data[randomIndex]);
+
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
     };
+
+    if (items.length === 0) return <p>Вы еще ничего не добавили</p>
 
     return (
         <div className="w-2/4 mx-auto flex flex-col  gap-6 items-center h-screen p-4">
@@ -53,7 +71,7 @@ export const ChooseContainer = ({
             </Link>
             <Button onClick={onChooseItem}>{buttonText}</Button>
             {choosenItem ? (
-                <ChoosenItem item={choosenItem} />
+                <ChoosenItem item={choosenItem} loading={loading} />
             ) : (
                 <FileQuestion size={100} />
             )}

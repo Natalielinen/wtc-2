@@ -11,6 +11,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     required?: boolean;
     className?: string;
     icon?: React.ReactNode;
+    hint?: string;
 }
 
 export const FormInput: React.FC<Props> = (
@@ -20,6 +21,7 @@ export const FormInput: React.FC<Props> = (
         label,
         required = false,
         icon = null,
+        hint = null,
         ...props
 
     }) => {
@@ -51,9 +53,13 @@ export const FormInput: React.FC<Props> = (
             {value && <ClearButton onClick={() => setValue(name, '')} />}
 
         </div>
+        {
+            hint && <p className="text-xs text-muted-foreground mt-2">{hint}</p>
+        }
 
         {
-            error && <ErrorText text={error.message as string} />}
+            error && <ErrorText text={error.message as string} />
+        }
 
     </div>
 };

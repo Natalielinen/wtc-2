@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { CategoriesEnum, GenreEnum } from "@/server/schema";
 import { addItem } from "@/server/actions/add-item";
 import { editItem } from "@/server/actions/edit-item";
+import { Textarea } from "@/components/ui/textarea";
 
 type AddItemModalProps = {
     editMode?: boolean;
@@ -126,10 +127,12 @@ export const AddItemModal = ({
                                     options={GenreEnum.enumValues as string[]}
                                 />
                                 <FormInput name="name" placeholder="Название" />
-                                <FormInput name="sourceLink" placeholder="Ссылка" />
+                                <Textarea name="sourceLink" placeholder="Ссылка" />
+                                {/* <FormInput name="sourceLink" placeholder="Ссылка" hint="Можно добавить несколько ссылок через запятую: 'www.ex.com, www.film.io'" /> */}
                                 <FormInput
                                     name="imageUrl"
                                     placeholder="Ссылка на изображение"
+
                                 />
 
                                 <Button type="submit" disabled={form.formState.isSubmitting}>

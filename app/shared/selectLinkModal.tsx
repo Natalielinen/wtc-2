@@ -9,20 +9,26 @@ type SelectLinkModalProps = {
 }
 
 export const SelectLinkModal: FC<SelectLinkModalProps> = ({ openLinkDialog, setShow, links }) => {
+
+
     const websiteName = (url: string) => {
-        const urlStr = url;
+        try {
+            const normalizedUrl = url.startsWith('http')
+                ? url
+                : `https://${url}`;
 
-        // 1. Создаем объект URL, чтобы корректно отсечь протоколы и пути
-        const hostname = new URL(urlStr).hostname;
-        // Результат: "hd.kinopoisk.ru"
+            const hostname = new URL(encodeURI(normalizedUrl)).hostname;
 
-        // 2. Разбиваем по точкам и берем нужную часть
-        const parts = hostname.replace('www.', '').split('.');
-        const name = parts[parts.length - 2];
+            const parts = hostname.replace(/^www\./, '').split('.');
+            return parts[parts.length - 2];
+        } catch (error) {
+            console.error('Error parsing URL:', error);
+            return url;
+        }
+    };
 
-        console.log(name); // "kinopoisk"
-
-        return name;
+    const onLinkClick = () => {
+        setShow(false);
     }
     return (
         <Dialog open={openLinkDialog} onOpenChange={() => setShow(false)}>
@@ -35,7 +41,7 @@ export const SelectLinkModal: FC<SelectLinkModalProps> = ({ openLinkDialog, setS
                 <DialogDescription>
                     <div className="flex flex-col gap-2">
                         {
-                            links.map((link, index) => <a key={index} href={link} target="_blank" rel="noopener noreferrer">{websiteName(link)}</a>)
+                            links.map((link, index) => <a key={index} href={link} target="_blank" rel="noopener noreferrer" onClick={onLinkClick}>{websiteName(link)}</a>)
                         }
 
                     </div>

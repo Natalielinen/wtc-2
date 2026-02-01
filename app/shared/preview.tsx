@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Item } from "../types";
 import { Pencil, Play, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,8 +47,6 @@ export const Preview = ({ item }: PreviewProps) => {
     const onLinkClick = (link: string) => {
         const linksArray = link.split(",");
 
-        console.log(linksArray);
-
         if (linksArray.length === 1) {
             window.open(link, "_blank");
             onPlayClick();
@@ -88,8 +85,8 @@ export const Preview = ({ item }: PreviewProps) => {
                                 <Trash2 />
                             </Button>
                         </div>
-                        <div>
-                            <Button onClick={() => onLinkClick(item.sourceLink)} className="justify-self-center" >
+                        <div className="flex justify-center">
+                            <Button onClick={() => onLinkClick(item.sourceLink)} variant="ghost" size="lg" className="justify-self-center" >
                                 <Play
                                     size={48}
                                 />

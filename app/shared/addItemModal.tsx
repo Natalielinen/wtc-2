@@ -18,6 +18,8 @@ import toast from "react-hot-toast";
 import { CategoriesEnum, GenreEnum } from "@/server/schema";
 import { addItem } from "@/server/actions/add-item";
 import { editItem } from "@/server/actions/edit-item";
+import { FormTextarea } from "./formFields/formTextarea";
+import { useEffect } from "react";
 
 type AddItemModalProps = {
     editMode?: boolean;
@@ -46,6 +48,21 @@ export const AddItemModal = ({
             },
         resolver: zodResolver(addItemSchema),
     });
+
+    useEffect(() => {
+
+        if (editValues) {
+            form.reset({
+                category: editValues.category as Category,
+                genre: editValues.genre as Genre,
+                name: editValues.name,
+                sourceLink: editValues.sourceLink,
+                imageUrl: editValues.imageUrl,
+            });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editValues])
 
     const onItemClick = (item: Item) => {
         // Используем строгое обновление значений формы
@@ -126,10 +143,11 @@ export const AddItemModal = ({
                                     options={GenreEnum.enumValues as string[]}
                                 />
                                 <FormInput name="name" placeholder="Название" />
-                                <FormInput name="sourceLink" placeholder="Ссылка" />
+                                <FormTextarea name="sourceLink" placeholder="Ссылки (можно добавить несколько ссылок через запятую без пробелов)" />
                                 <FormInput
                                     name="imageUrl"
                                     placeholder="Ссылка на изображение"
+
                                 />
 
                                 <Button type="submit" disabled={form.formState.isSubmitting}>

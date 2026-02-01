@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Item } from "../types";
 import { Pencil, Play, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,7 @@ import React from "react";
 import { format } from "date-fns";
 import { editItem } from "@/server/actions/edit-item";
 import { updateWatchCount } from "@/server/actions/update-watch-count";
+import { SelectLinkModal } from "./selectLinkModal";
 
 const AddItemModal = React.lazy(() => import("./addItemModal"));
 const ConfirmDeleteModal = React.lazy(() => import("./confirmDeleteModal"));
@@ -22,6 +22,8 @@ export const Preview = ({ item }: PreviewProps) => {
     // Данные и состояние
     const [show, setShow] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+
+    const [showSelectLinkModal, setShowSelectLinkModal] = useState<boolean>(false);
 
     // Взаимодействие с UI
     const onPlayClick = async () => {
@@ -41,6 +43,18 @@ export const Preview = ({ item }: PreviewProps) => {
             throw error;
         }
     };
+
+    const onLinkClick = (link: string) => {
+        const linksArray = link.split(",");
+
+        if (linksArray.length === 1) {
+            window.open(link, "_blank");
+            onPlayClick();
+        } else {
+            setShowSelectLinkModal(true);
+        }
+
+    }
 
     // UI
     return (
@@ -71,14 +85,12 @@ export const Preview = ({ item }: PreviewProps) => {
                                 <Trash2 />
                             </Button>
                         </div>
-                        <div>
-                            <Link href={item.sourceLink} target="_blank">
+                        <div className="flex justify-center">
+                            <Button onClick={() => onLinkClick(item.sourceLink)} variant="ghost" size="lg" className="justify-self-center" >
                                 <Play
                                     size={48}
-                                    className="justify-self-center"
-                                    onClick={onPlayClick}
                                 />
-                            </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -102,6 +114,12 @@ export const Preview = ({ item }: PreviewProps) => {
                 name={item.name}
                 openDeleteModal={showDeleteModal}
                 setShow={setShowDeleteModal}
+            />
+
+            <SelectLinkModal
+                openLinkDialog={showSelectLinkModal}
+                setShow={setShowSelectLinkModal}
+                links={item.sourceLink.split(",")}
             />
         </>
     );

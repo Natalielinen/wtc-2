@@ -47,6 +47,19 @@ export const userItems = pgTable("userItems", {
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),  
 });
 
+export const userWebsites = pgTable("userWebsites", {
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  url: text("url").notNull(),
+  name: text("name").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(), 
+});
+
 export const accounts = pgTable(
   "account",
   {

@@ -1,0 +1,1 @@
+ALTER TABLE "userWebsites" ADD COLUMN "createdAt" timestamp DEFAULT now() NOT NULL;

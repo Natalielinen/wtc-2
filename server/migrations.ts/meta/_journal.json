@@ -71,6 +71,20 @@
       "when": 1768039548552,
       "tag": "0009_flawless_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1770456252403,
+      "tag": "0010_mean_ender_wiggin",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1770456464474,
+      "tag": "0011_acoustic_ser_duncan",
+      "breakpoints": true
     }
   ]
 }

@@ -1,11 +1,13 @@
-import { CategoriesEnum, GenreEnum, userItems } from "@/server/schema";
+import { CategoriesEnum, GenreEnum, userItems, userWebsites } from "@/server/schema";
 import { InferInsertModel } from "drizzle-orm";
 
 // тип = union из элементов массива
 export type Genre = (typeof GenreEnum.enumValues)[number];
 export type Category = (typeof CategoriesEnum.enumValues)[number];
 
-export type Item = InferInsertModel<typeof userItems>
+export type Item = InferInsertModel<typeof userItems>;
+
+export type Website = InferInsertModel<typeof userWebsites>;
 
 // то что отправляется на бек
 export type ItemFields = {

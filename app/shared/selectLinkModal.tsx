@@ -6,9 +6,10 @@ type SelectLinkModalProps = {
     openLinkDialog: boolean;
     setShow: (show: boolean) => void;
     links: string[];
+    onPlayClick: () => void;
 }
 
-export const SelectLinkModal: FC<SelectLinkModalProps> = ({ openLinkDialog, setShow, links }) => {
+export const SelectLinkModal: FC<SelectLinkModalProps> = ({ openLinkDialog, setShow, links, onPlayClick }) => {
 
 
     const websiteName = (url: string) => {
@@ -28,6 +29,7 @@ export const SelectLinkModal: FC<SelectLinkModalProps> = ({ openLinkDialog, setS
     };
 
     const onLinkClick = () => {
+        onPlayClick();
         setShow(false);
     }
     return (

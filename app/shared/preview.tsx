@@ -120,6 +120,7 @@ export const Preview = ({ item }: PreviewProps) => {
                 openLinkDialog={showSelectLinkModal}
                 setShow={setShowSelectLinkModal}
                 links={item.sourceLink.split(",")}
+                onPlayClick={onPlayClick}
             />
         </>
     );

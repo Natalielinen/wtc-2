@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./shared/providers";
+import { cookies } from "next/headers";
+import { LanguageProvider } from "./providers/LanguageProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,18 +21,26 @@ export const metadata: Metadata = {
 };
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const cookieStore = cookies();
+  const lang = (await cookieStore).get("lang");
+
+  console.log(lang);
+
   return (
-    <html suppressHydrationWarning>
+    <html lang={lang?.value} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          {children}
+          <LanguageProvider initialLang={lang?.value || "ru"}>
+            {children}
+          </LanguageProvider>
         </Providers>
 
       </body>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button"
-import { Clapperboard, Gamepad2, Moon, Settings, Sun } from "lucide-react";
+import { Clapperboard, Gamepad2, Languages, Moon, Settings, Sun } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,18 +10,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddItemModal } from "./addItemModal";
 import { LoginModal } from "./loginModal";
 import { useUserStore } from "../stores/userStore";
 import toast from "react-hot-toast";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
+import { useLanguage } from "../providers/LanguageProvider";
+
 
 export const Header = ({ session }: { session: Session | null }) => {
     // Данные и состояние
     const { setOpenLoginModal } = useUserStore((state) => state);
     const { setTheme, theme } = useTheme();
+    const { lang, setLang } = useLanguage();
     const [showModal, setShowModal] = useState<boolean>(false);
 
     // Получение и обработка данных
@@ -38,6 +41,10 @@ export const Header = ({ session }: { session: Session | null }) => {
     // Взаимодействие с UI
     const onThemeChange = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
+    };
+
+    const onLangChange = () => {
+        setLang(lang === 'ru' ? 'en' : 'ru')
     };
 
     const onLoginClick = () => {
@@ -80,6 +87,9 @@ export const Header = ({ session }: { session: Session | null }) => {
                                 ? <p className="flex gap-2"> <p>Светлая</p>  <Sun size={18} /></p>
                                 : <p className="flex gap-2"> <p>Темная</p>  <Moon size={18} /></p>
                         }
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={onLangChange} className="cursor-pointer">
+                        <p className="flex gap-2">{lang === 'ru' ? 'Русский' : 'English'} <Languages size={18} /></p>
                     </DropdownMenuItem>
                     {
                         session && <>

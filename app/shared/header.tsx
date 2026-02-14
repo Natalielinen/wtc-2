@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AddItemModal } from "./addItemModal";
 import { LoginModal } from "./loginModal";
 import { useUserStore } from "../stores/userStore";
@@ -18,6 +18,8 @@ import toast from "react-hot-toast";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { useLanguage } from "../providers/LanguageProvider";
+import { useRouter } from "next/navigation";
+
 
 
 export const Header = ({ session }: { session: Session | null }) => {
@@ -26,6 +28,8 @@ export const Header = ({ session }: { session: Session | null }) => {
     const { setTheme, theme } = useTheme();
     const { lang, setLang } = useLanguage();
     const [showModal, setShowModal] = useState<boolean>(false);
+
+    const router = useRouter();
 
     // Получение и обработка данных
     const logout = async () => {
@@ -44,7 +48,9 @@ export const Header = ({ session }: { session: Session | null }) => {
     };
 
     const onLangChange = () => {
-        setLang(lang === 'ru' ? 'en' : 'ru')
+        setLang(lang === 'ru' ? 'en' : 'ru');
+
+        router.refresh();
     };
 
     const onLoginClick = () => {

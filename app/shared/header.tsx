@@ -19,8 +19,7 @@ import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { useLanguage } from "../providers/LanguageProvider";
 import { useRouter } from "next/navigation";
-
-
+import { Lang, translation } from "@/translation/translation";
 
 export const Header = ({ session }: { session: Session | null }) => {
     // Данные и состояние
@@ -35,10 +34,10 @@ export const Header = ({ session }: { session: Session | null }) => {
     const logout = async () => {
         try {
             signOut();
-            toast.success("Вы вышли из аккаунта");
+            toast.success(translation[lang as Lang].successSignoutMessage);
         } catch (error) {
             console.error("Error [LOGOUT]", error);
-            toast.error("Ошибка при выходе");
+            toast.error(translation[lang as Lang].signoutError);
         }
     };
 
@@ -90,8 +89,8 @@ export const Header = ({ session }: { session: Session | null }) => {
                     <DropdownMenuItem onClick={onThemeChange} className="cursor-pointer">
                         {
                             theme === 'dark'
-                                ? <p className="flex gap-2"> <p>Светлая</p>  <Sun size={18} /></p>
-                                : <p className="flex gap-2"> <p>Темная</p>  <Moon size={18} /></p>
+                                ? <p className="flex gap-2"> <p>{translation[lang as Lang].lightTheme}</p>  <Sun size={18} /></p>
+                                : <p className="flex gap-2"> <p>{translation[lang as Lang].darkTheme}</p>  <Moon size={18} /></p>
                         }
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={onLangChange} className="cursor-pointer">
@@ -101,13 +100,15 @@ export const Header = ({ session }: { session: Session | null }) => {
                         session && <>
                             <DropdownMenuItem className="cursor-pointer">
                                 <Link href="/profile">
-                                    Профиль
+                                    {translation[lang as Lang].profile}
                                 </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="cursor-pointer" onClick={() => setShowModal(true)}>Добавить</DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => setShowModal(true)}>{translation[lang as Lang].add}</DropdownMenuItem>
                         </>
                     }
-                    <DropdownMenuItem className="cursor-pointer" onClick={onLoginClick}>{session ? 'Выйти' : 'Войти'}</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer" onClick={onLoginClick}>{session
+                        ? translation[lang as Lang].signOut
+                        : translation[lang as Lang].signIn}</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

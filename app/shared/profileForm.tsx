@@ -1,21 +1,27 @@
-'use client';
+"use client";
 
 import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from '@hookform/resolvers/zod';
-import { profileFormSchema, ProfileFormValues } from "./schemas/profileFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    profileFormSchema,
+    ProfileFormValues,
+} from "./schemas/profileFormSchema";
 import { FormInput } from "./formFields";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "../stores/userStore";
 import { useEffect } from "react";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 export const ProfileForm = () => {
+    const { lang } = useLanguage();
 
     // Данные и состояние
     const form = useForm<ProfileFormValues>({
         defaultValues: {
-            userName: '',
-            userEmail: '',
-            userPassword: '',
+            userName: "",
+            userEmail: "",
+            userPassword: "",
         },
         resolver: zodResolver(profileFormSchema),
     });
@@ -28,22 +34,36 @@ export const ProfileForm = () => {
             form.reset({
                 userName: user.userName,
                 userEmail: user.userEmail,
-                userPassword: user.userPassword
-            })
+                userPassword: user.userPassword,
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user])
+    }, [user]);
 
     // UI
-    return <FormProvider {...form}>
-        <form className='flex flex-col gap-4 mt-4' onSubmit={form.handleSubmit((data) => console.log(data))}>
+    return (
+        <FormProvider {...form}>
+            <form
+                className="flex flex-col gap-4 mt-4"
+                onSubmit={form.handleSubmit((data) => console.log(data))}
+            >
+                <FormInput
+                    name="userName"
+                    placeholder={translation[lang as Lang].name}
+                />
+                <FormInput
+                    name="userEmail"
+                    placeholder={translation[lang as Lang].email}
+                    type="email"
+                />
+                <FormInput
+                    name="userPassword"
+                    placeholder={translation[lang as Lang].password}
+                    type="password"
+                />
 
-
-            <FormInput name="userName" placeholder="Имя" />
-            <FormInput name="userEmail" placeholder="Почта" type="email" />
-            <FormInput name="userPassword" placeholder="Пароль" type="password" />
-
-            <Button type="submit">Сохранить</Button>
-        </form>
-    </FormProvider>
-}
+                <Button type="submit">{translation[lang as Lang].save}</Button>
+            </form>
+        </FormProvider>
+    );
+};

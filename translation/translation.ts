@@ -25,6 +25,10 @@ export const translation: Record<Lang, Record<string, string>> = {
     email: "Почта",
     password: "Пароль",
     save: "Сохранить",
+    updateElementError: "Ошибка при обновлении элемента",
+    watchDate: "Дата просмотра:",
+    watched: "Просмотрено",
+    times: "раз",
   },
   en: {
     title: "What to choose?",
@@ -49,5 +53,9 @@ export const translation: Record<Lang, Record<string, string>> = {
     email: "Email",
     password: "Password",
     save: "Save",
+    updateElementError: "Update element error",
+    watchDate: "Watch date:",
+    watched: "Watched",
+    times: "times",
   },
 };

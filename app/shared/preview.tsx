@@ -10,6 +10,8 @@ import { format } from "date-fns";
 import { editItem } from "@/server/actions/edit-item";
 import { updateWatchCount } from "@/server/actions/update-watch-count";
 import { SelectLinkModal } from "./selectLinkModal";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 const AddItemModal = React.lazy(() => import("./addItemModal"));
 const ConfirmDeleteModal = React.lazy(() => import("./confirmDeleteModal"));
@@ -19,6 +21,7 @@ type PreviewProps = {
 };
 
 export const Preview = ({ item }: PreviewProps) => {
+    const { lang } = useLanguage();
     // Данные и состояние
     const [show, setShow] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -39,7 +42,7 @@ export const Preview = ({ item }: PreviewProps) => {
 
             updateWatchCount(item.id);
         } catch (error) {
-            toast.error(`Ошибка при обновлении элемента: ${error}`);
+            toast.error(`${translation[lang as Lang].updateElementError} ${error}`);
             throw error;
         }
     };
@@ -73,9 +76,9 @@ export const Preview = ({ item }: PreviewProps) => {
                                 <p>{item.name}</p>
                                 <p>
                                     {" "}
-                                    Дата просмотра: {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}
+                                    {translation[lang as Lang].watchDate} {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}
                                 </p>
-                                <p> Просмотрен {item.watchCount} раз</p>
+                                <p> {translation[lang as Lang].watched} {item.watchCount} {translation[lang as Lang].times}</p>
                             </p>
                             <Button variant="ghost" onClick={() => setShow(true)}>
                                 <Pencil />

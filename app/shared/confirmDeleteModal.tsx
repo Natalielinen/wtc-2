@@ -11,6 +11,8 @@ import {
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { deleteItem } from "@/server/actions/delete-item";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 type ConfirmDeleteModalProps = {
     openDeleteModal: boolean;
@@ -25,6 +27,7 @@ export const ConfirmDeleteModal = ({
     name,
     id,
 }: ConfirmDeleteModalProps) => {
+    const { lang } = useLanguage();
     // Данные и состояние
     const [deleting, setDeleting] = useState(false);
 
@@ -40,7 +43,7 @@ export const ConfirmDeleteModal = ({
                     setDeleting(false);
                 });
         } catch (error) {
-            toast.error(`Ошибка при удалении элемента ${name}`);
+            toast.error(`${translation[lang as Lang].errorDeletingElement} ${name}`);
             throw error;
         } finally {
             setDeleting(false);
@@ -52,16 +55,17 @@ export const ConfirmDeleteModal = ({
         <Dialog open={openDeleteModal} onOpenChange={() => setShow(false)}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Удаление</DialogTitle>
+                    <DialogTitle>{translation[lang as Lang].deleting}</DialogTitle>
                     <DialogDescription>
-                        Вы действительно хотите удалить <strong>{name}</strong>?
+                        {translation[lang as Lang].doYouReallyWantToDelete}{" "}
+                        <strong>{name}</strong>?
                         <div className="flex gap-4 mt-4">
                             <Button
                                 variant="destructive"
                                 onClick={handleDeleteItem}
                                 disabled={deleting}
                             >
-                                Да, удалить
+                                {translation[lang as Lang].yesDelete}
                             </Button>
 
                             <Button
@@ -69,7 +73,7 @@ export const ConfirmDeleteModal = ({
                                 onClick={() => setShow(false)}
                                 disabled={deleting}
                             >
-                                Отменить
+                                {translation[lang as Lang].cancel}
                             </Button>
                         </div>
                     </DialogDescription>

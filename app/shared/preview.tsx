@@ -25,7 +25,6 @@ export const Preview = ({ item }: PreviewProps) => {
     // Данные и состояние
     const [show, setShow] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-
     const [showSelectLinkModal, setShowSelectLinkModal] = useState<boolean>(false);
 
     // Взаимодействие с UI

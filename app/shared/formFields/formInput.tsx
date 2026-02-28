@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Asterisk } from "lucide-react";
 import { ClearButton, ErrorText } from "..";
@@ -32,37 +32,37 @@ export const FormInput: React.FC<Props> = (
         register,
         formState: { errors },
         watch,
-        setValue
+        setValue,
     } = useFormContext();
 
     const value = watch(name);
     const error = errors[name];
 
-    return <div className={className}>
-        {
-            label && <p className="flex font-medium mb-2">
-                {label} {required && <Asterisk className="text-red-500" />}
-            </p>
-        }
+    return (
+        <div className={className}>
+            {label && (
+                <p className="flex font-medium mb-2">
+                    {label} {required && <Asterisk className="text-red-500" />}
+                </p>
+            )}
 
-        <div className="relative">
-            <Input
-                className="text-md"
-                {...register(name)}
-                autoComplete={autocomplete}
-                {...props} />
+            <div className="relative">
+                <Input
+                    className="text-md"
+                    {...register(name)}
+                    autoComplete={autocomplete}
+                    {...props} />
 
-            {icon && <div className="absolute right-10 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 cursor-pointer">{icon}</div>}
-            {value && <ClearButton onClick={() => setValue(name, '')} />}
+                {icon && (
+                    <div className="absolute right-10 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 cursor-pointer">
+                        {icon}
+                    </div>
+                )}
+                {value && <ClearButton onClick={() => setValue(name, "")} />}
+            </div>
+            {hint && <p className="text-xs text-muted-foreground mt-2">{hint}</p>}
 
+            {error && <ErrorText text={error.message as string} />}
         </div>
-        {
-            hint && <p className="text-xs text-muted-foreground mt-2">{hint}</p>
-        }
-
-        {
-            error && <ErrorText text={error.message as string} />
-        }
-
-    </div>
+    );
 };

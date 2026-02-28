@@ -57,6 +57,7 @@ export const translation: Record<Lang, Record<string, string>> = {
     minPasswordLength: "Минимальная длина пароля 4 символа",
     minUsernameLength: "Минимальная длина имени 2 символа",
     passwordsNotMatch: "Пароли не совпадают",
+    forgotPassword: "Забыли пароль?",
   },
   en: {
     title: "What to choose?",
@@ -113,5 +114,6 @@ export const translation: Record<Lang, Record<string, string>> = {
     minPasswordLength: "The minimum password length is 4 characters",
     minUsernameLength: "The minimum username length is 2 characters",
     passwordsNotMatch: "Passwords do not match",
+    forgotPassword: "Forgot password?",
   },
 };

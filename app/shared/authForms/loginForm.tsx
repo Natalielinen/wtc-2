@@ -13,12 +13,15 @@ import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { emailSignin } from "@/server/actions/email-signin";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/app/providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 interface LoginForm {
     onAuthModalClose: () => void;
 }
 
 export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
+    const { lang } = useLanguage();
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const router = useRouter();
@@ -59,13 +62,13 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
                 >
                     <FormInput
                         name="email"
-                        placeholder="Почта"
+                        placeholder={translation[lang as Lang].email}
                         type="email"
                         autoComplete="email"
                     />
                     <FormInput
                         name="password"
-                        placeholder="Пароль"
+                        placeholder={translation[lang as Lang].password}
                         type={showPassword ? "text" : "password"}
                         icon={
                             !showPassword ? (
@@ -78,13 +81,15 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
                     />
 
                     <Button type="submit" disabled={status === "executing"}>
-                        Войти
+                        {translation[lang as Lang].signIn}
                     </Button>
                 </form>
             </FormProvider>
             <SocialButtons />
             <div className="text-center">
-                <Link href="/auth/reset">Забыли пароль?</Link>
+                <Link href="/auth/reset">
+                    {translation[lang as Lang].forgotPassword}
+                </Link>
             </div>
         </div>
     );

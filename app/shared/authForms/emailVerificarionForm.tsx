@@ -1,15 +1,14 @@
-'use client';
+"use client";
 
 import { newVerification } from "@/server/actions/tokens";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 export const EmailVerificationForm = () => {
-
-    const token = useSearchParams().get('token');
+    const token = useSearchParams().get("token");
     const router = useRouter();
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const handleVerification = useCallback(async () => {
         if (success || error) {
@@ -17,7 +16,7 @@ export const EmailVerificationForm = () => {
         }
 
         if (!token) {
-            setError('Token not found');
+            setError("Token not found");
             return;
         }
 
@@ -27,16 +26,16 @@ export const EmailVerificationForm = () => {
             }
             if (data.success) {
                 setSuccess(data.success);
-                router.push('/');
+                router.push("/");
             }
-        })
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         handleVerification();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, []);
 
     return (
         <div className="flex flex-col items-center">
@@ -45,4 +44,4 @@ export const EmailVerificationForm = () => {
             {error && <p>{error}</p>}
         </div>
     );
-}
+};

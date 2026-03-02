@@ -1,4 +1,3 @@
-
 export type Lang = "ru" | "en";
 
 export const translation: Record<Lang, Record<string, string>> = {
@@ -58,6 +57,10 @@ export const translation: Record<Lang, Record<string, string>> = {
     minUsernameLength: "Минимальная длина имени 2 символа",
     passwordsNotMatch: "Пароли не совпадают",
     forgotPassword: "Забыли пароль?",
+    user: "Пользователь",
+    successfullyRegistered: "успешно зарегистрирован",
+    emailSent: "На указанную почту отправлено письмо с подтверждением",
+    retypePassword: "Повторите пароль",
   },
   en: {
     title: "What to choose?",
@@ -115,5 +118,9 @@ export const translation: Record<Lang, Record<string, string>> = {
     minUsernameLength: "The minimum username length is 2 characters",
     passwordsNotMatch: "Passwords do not match",
     forgotPassword: "Forgot password?",
+    user: "User",
+    successfullyRegistered: "successfully registered",
+    emailSent: "A confirmation letter has been sent to the specified email",
+    retypePassword: "Retype password",
   },
 };

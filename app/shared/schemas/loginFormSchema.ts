@@ -1,11 +1,15 @@
+
 import { Lang, translation } from "@/translation/translation";
 import { z } from "zod";
 
-const lang = localStorage.getItem("lang");
-
-export const loginFormSchema = z.object({
+export const createLoginFormSchema = (lang: Lang) =>
+  z.object({
     email: z.string().email(),
-    password: z.string().min(4, translation[lang as Lang].minPasswordLength),
-});
+    password: z
+      .string()
+      .min(4, translation[lang].minPasswordLength),
+  });
 
-export type LoginFormValues = z.infer<typeof loginFormSchema>;
+export type LoginFormValues = z.infer<
+  ReturnType<typeof createLoginFormSchema>
+>;

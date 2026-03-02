@@ -1,7 +1,7 @@
 "use client";
 
 import { FormProvider, useForm } from "react-hook-form";
-import { loginFormSchema, LoginFormValues } from "../schemas/loginFormSchema";
+import { createLoginFormSchema, LoginFormValues } from "../schemas/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { FormInput } from "../formFields";
@@ -24,6 +24,8 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
     const { lang } = useLanguage();
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
+    const schema = createLoginFormSchema(lang as Lang);
+
     const router = useRouter();
 
     const form = useForm<LoginFormValues>({
@@ -31,7 +33,7 @@ export const LoginForm = ({ onAuthModalClose }: LoginForm) => {
             email: "",
             password: "",
         },
-        resolver: zodResolver(loginFormSchema),
+        resolver: zodResolver(schema),
     });
 
     const toggleShowPassword = (isOff: boolean = false) => setShowPassword(isOff);

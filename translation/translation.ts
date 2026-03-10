@@ -61,6 +61,8 @@ export const translation: Record<Lang, Record<string, string>> = {
     successfullyRegistered: "успешно зарегистрирован",
     emailSent: "На указанную почту отправлено письмо с подтверждением",
     retypePassword: "Повторите пароль",
+    selectMovie: "Выбрать фильм",
+    selectGame: "Выбрать игру"
   },
   en: {
     title: "What to choose?",
@@ -122,5 +124,7 @@ export const translation: Record<Lang, Record<string, string>> = {
     successfullyRegistered: "successfully registered",
     emailSent: "A confirmation letter has been sent to the specified email",
     retypePassword: "Retype password",
+    selectMovie: "Select movie",
+    selectGame: "Select game"
   },
 };

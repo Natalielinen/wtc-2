@@ -1,15 +1,8 @@
-
-import { Lang, translation } from "@/translation/translation";
 import { z } from "zod";
 
-export const createLoginFormSchema = (lang: Lang) =>
-  z.object({
+export const loginFormSchema = z.object({
     email: z.string().email(),
-    password: z
-      .string()
-      .min(4, translation[lang].minPasswordLength),
-  });
+    password: z.string().min(4, "Минимальная длина пароля 4 символа"),
+});
 
-export type LoginFormValues = z.infer<
-  ReturnType<typeof createLoginFormSchema>
->;
+export type LoginFormValues = z.infer<typeof loginFormSchema>;

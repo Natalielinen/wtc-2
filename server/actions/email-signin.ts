@@ -8,19 +8,12 @@ import { generateEmailVerificationToken } from "./tokens";
 import { sentVerificationEmail } from "./emails";
 import { signIn } from "../auth";
 import { AuthError } from "next-auth";
-import { createLoginFormSchema } from "@/app/shared/schemas/loginFormSchema";
-import { cookies } from "next/headers";
-import { Lang } from "@/translation/translation";
-
-const cookieStore = cookies();
-const lang = (await cookieStore).get("lang");
+import { loginFormSchema } from "@/app/shared/schemas/loginFormSchema";
 
 const actionClient = createSafeActionClient();
 
-const schema = createLoginFormSchema(lang?.value as Lang);
-
 export const emailSignin = actionClient
-  .schema(schema)
+  .schema(loginFormSchema)
   .action(async ({ parsedInput: { email, password } }) => {
     try {
       const existingUser = await db.query.users.findFirst({

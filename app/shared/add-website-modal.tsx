@@ -29,6 +29,7 @@ export const AddWebsiteModal = ({
     setShow,
 }: AddWebsiteModalProps) => {
     const { lang } = useLanguage();
+
     const form = useForm<AddWebsiteFormValues>({
         defaultValues: {
             name: "",

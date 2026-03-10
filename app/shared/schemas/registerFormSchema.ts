@@ -1,16 +1,13 @@
-import { Lang, translation } from "@/translation/translation";
 import { z } from "zod";
 
-const lang = localStorage.getItem("lang");
-
 export const registerFormSchema = z.object({
-    userName: z.string().min(2, translation[lang as Lang].minUsernameLength),
+    userName: z.string().min(2, "Минимальная длина имени 2 символа"),
     userEmail: z.string().email(),
-    userPassword: z.string().min(4, translation[lang as Lang].minPasswordLength),
-    retypePassword: z.string().min(4, translation[lang as Lang].minPasswordLength),
+    userPassword: z.string().min(4, "Минимальная длина пароля 6 символа"),
+    retypePassword: z.string().min(4, "Минимальная длина пароля 6 символа"),
 })
 .refine((data) => data.userPassword === data.retypePassword, {
-    message: translation[lang as Lang].passwordsNotMatch,
+    message: 'Пароли не совпадают',
     path: ['retypePassword'],
   });
 ;

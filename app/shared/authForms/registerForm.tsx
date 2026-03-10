@@ -22,6 +22,7 @@ type RegisterFormProps = {
 
 export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
     const { lang } = useLanguage();
+
     const form = useForm<RegisterFormValues>({
         defaultValues: {
             userName: "",

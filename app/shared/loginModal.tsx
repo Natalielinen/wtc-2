@@ -2,14 +2,14 @@
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { LoginForm, RegisterForm } from "./authForms";
 import { useUserStore } from "../stores/userStore";
 
 export const LoginModal = () => {
     // Данные и состояние
-    const [registerForm, setRegisterForm] = useState<boolean>(false);
-    const { openLoginModal, setOpenLoginModal } = useUserStore((state) => state);
+
+    const { openLoginModal, registerForm, setRegisterForm, setOpenLoginModal } = useUserStore((state) => state);
+
 
     // Взаимодействие с UI
     const onAuthModalClose = () => {

@@ -12,6 +12,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     className?: string;
     icon?: React.ReactNode;
     hint?: string;
+    autocomplete?: string;
 }
 
 export const FormInput: React.FC<Props> = (
@@ -22,6 +23,7 @@ export const FormInput: React.FC<Props> = (
         required = false,
         icon = null,
         hint = null,
+        autocomplete = 'on',
         ...props
 
     }) => {
@@ -47,6 +49,7 @@ export const FormInput: React.FC<Props> = (
             <Input
                 className="text-md"
                 {...register(name)}
+                autoComplete={autocomplete}
                 {...props} />
 
             {icon && <div className="absolute right-10 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 cursor-pointer">{icon}</div>}

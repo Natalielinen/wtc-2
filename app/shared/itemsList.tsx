@@ -11,10 +11,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const ItemsList = ({ session }: { session: Session | null }) => {
     // Данные и состояние
-    const { setOpenLoginModal } = useUserStore((state) => state);
+    const { setOpenLoginModal, setRegisterForm } = useUserStore((state) => state);
     const { items, websites, websitesLoading, fetchItems, fetchWebsites } = useItemsStore((state) => state);
 
     const openLoginModal = () => setOpenLoginModal(true);
+
+    const openRegisterModal = () => {
+        setRegisterForm(true);
+        setOpenLoginModal(true);
+    }
 
     useEffect(() => {
         fetchItems(session?.user?.id || "");
@@ -38,7 +43,7 @@ export const ItemsList = ({ session }: { session: Session | null }) => {
                 Войдите
             </Button>
             или
-            <Button variant="link" onClick={openLoginModal}>
+            <Button variant="link" onClick={openRegisterModal}>
                 Зарегистрируйтесь
             </Button>
             чтобы добавлять и просматривать фильмы и игры

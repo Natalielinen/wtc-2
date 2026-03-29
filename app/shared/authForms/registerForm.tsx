@@ -68,12 +68,13 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
                 className="flex flex-col gap-4 mt-4"
                 onSubmit={form.handleSubmit(onRegister)}
             >
-                <FormInput name="userName" placeholder="Имя" type="text" />
-                <FormInput name="userEmail" placeholder="Почта" type="email" />
+                <FormInput name="userName" placeholder="Имя" type="text" autoComplete="off" />
+                <FormInput name="userEmail" placeholder="Почта" type="email" autoComplete="off" />
                 <FormInput
                     name="userPassword"
                     placeholder="Пароль"
                     type={showPassword ? "text" : "password"}
+                    autoComplete="off"
                     icon={
                         !showPassword ? (
                             <Eye onClick={() => toggleShowPassword(true)} />
@@ -86,6 +87,7 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
                     name="retypePassword"
                     placeholder="Повторите пароль"
                     type={showRetypePassword ? "text" : "password"}
+                    autoComplete="off"
                     icon={
                         !showRetypePassword ? (
                             <Eye onClick={() => toggleShowPassword(true, true)} />

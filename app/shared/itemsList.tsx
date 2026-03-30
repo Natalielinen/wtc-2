@@ -46,7 +46,7 @@ export const ItemsList = ({ session }: { session: Session | null }) => {
                 {translation[lang as Lang].signin}
             </Button>
             {translation[lang as Lang].or}
-            <Button variant="link" onClick={openLoginModal}>
+            <Button variant="link" onClick={openRegisterModal}>
                 {translation[lang as Lang].signup}
             </Button>
             {translation[lang as Lang].viewAndAdd}

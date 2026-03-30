@@ -20,6 +20,8 @@ import { addItem } from "@/server/actions/add-item";
 import { editItem } from "@/server/actions/edit-item";
 import { FormTextarea } from "./formFields/formTextarea";
 import { useEffect } from "react";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 type AddItemModalProps = {
     editMode?: boolean;
@@ -36,6 +38,7 @@ export const AddItemModal = ({
     editValues,
     itemId,
 }: AddItemModalProps) => {
+    const { lang } = useLanguage();
     const form = useForm<AddItemFormValues>({
         defaultValues: editMode
             ? editValues
@@ -50,7 +53,6 @@ export const AddItemModal = ({
     });
 
     useEffect(() => {
-
         if (editValues) {
             form.reset({
                 category: editValues.category as Category,
@@ -62,7 +64,7 @@ export const AddItemModal = ({
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editValues])
+    }, [editValues]);
 
     const onItemClick = (item: Item) => {
         // Используем строгое обновление значений формы
@@ -89,7 +91,7 @@ export const AddItemModal = ({
                     setShow(false);
                 });
             } catch (error) {
-                console.error("Ошибка при добавлении элемента:", error);
+                console.error(translation[lang as Lang].errorAddingElement, error);
                 throw error;
             }
         } else {
@@ -110,7 +112,9 @@ export const AddItemModal = ({
                     setShow(false);
                 });
             } catch (error) {
-                toast.error(`Ошибка при обновлении элемента: ${error}`);
+                toast.error(
+                    `${translation[lang as Lang].errorUpdatingElement}: ${error}`,
+                );
                 throw error;
             } finally {
                 setShow(false);
@@ -125,7 +129,9 @@ export const AddItemModal = ({
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        {editMode ? "Редактирование" : "Добавление"}
+                        {editMode
+                            ? translation[lang as Lang].editing
+                            : translation[lang as Lang].adding}
                     </DialogTitle>
                     <DialogDescription>
                         {!editMode && <SearchInput onClick={onItemClick} />}
@@ -142,16 +148,21 @@ export const AddItemModal = ({
                                     name="genre"
                                     options={GenreEnum.enumValues as string[]}
                                 />
-                                <FormInput name="name" placeholder="Название" />
-                                <FormTextarea name="sourceLink" placeholder="Ссылки (можно добавить несколько ссылок через запятую без пробелов)" />
+                                <FormInput
+                                    name="name"
+                                    placeholder={translation[lang as Lang].elementTitle}
+                                />
+                                <FormTextarea
+                                    name="sourceLink"
+                                    placeholder={translation[lang as Lang].linksPlaceholder}
+                                />
                                 <FormInput
                                     name="imageUrl"
-                                    placeholder="Ссылка на изображение"
-
+                                    placeholder={translation[lang as Lang].imageUrl}
                                 />
 
                                 <Button type="submit" disabled={form.formState.isSubmitting}>
-                                    Сохранить
+                                    {translation[lang as Lang].save}
                                 </Button>
                             </form>
                         </FormProvider>

@@ -5,6 +5,8 @@ import { useDebounce } from "react-use";
 import { Film, Item } from "../types";
 import { GenreEnum } from "@/server/schema";
 import { SearchItemUI } from "./search-item-ui";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 interface Props {
     className?: string;
@@ -15,6 +17,8 @@ export const SearchInput: React.FC<Props> = ({ onClick }) => {
     // Данные и состояние
     const [searchQuery, setSearchQuery] = React.useState<string>("");
     const [items, setItems] = React.useState<Item[]>([]);
+
+    const { lang } = useLanguage();
 
     // Получение и обработка данных
     const getFilms = () => {
@@ -36,7 +40,7 @@ export const SearchInput: React.FC<Props> = ({ onClick }) => {
                         id: film.kinopoiskId,
                         category: {
                             value: "1",
-                            label: "Фильмы",
+                            label: translation[lang as Lang].movies,
                         },
                         genre: [GenreEnum.enumValues[0]],
                         sourceLink: "",

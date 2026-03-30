@@ -11,8 +11,13 @@ import { FormInput } from "./formFields";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { AddWebsiteFormValues, addWebsiteSchema } from "./schemas/addWebsiteFormSchema";
+import {
+    AddWebsiteFormValues,
+    addWebsiteSchema,
+} from "./schemas/addWebsiteFormSchema";
 import { addWebsite } from "@/server/actions/add-website";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 type AddWebsiteModalProps = {
     openAddModal: boolean;
@@ -23,6 +28,8 @@ export const AddWebsiteModal = ({
     openAddModal,
     setShow,
 }: AddWebsiteModalProps) => {
+    const { lang } = useLanguage();
+
     const form = useForm<AddWebsiteFormValues>({
         defaultValues: {
             name: "",
@@ -30,7 +37,6 @@ export const AddWebsiteModal = ({
         },
         resolver: zodResolver(addWebsiteSchema),
     });
-
 
     const onSubmit = async (data: AddWebsiteFormValues) => {
         addWebsite(data);
@@ -42,24 +48,24 @@ export const AddWebsiteModal = ({
         <Dialog open={openAddModal} onOpenChange={() => setShow(false)}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>
-                        Добавить сайт
-                    </DialogTitle>
+                    <DialogTitle>{translation[lang as Lang].addWebsite}</DialogTitle>
                     <DialogDescription>
                         <FormProvider {...form}>
                             <form
                                 className="flex flex-col gap-4 mt-4"
                                 onSubmit={form.handleSubmit(onSubmit)}
                             >
-                                <FormInput name="name" placeholder="Название" />
+                                <FormInput
+                                    name="name"
+                                    placeholder={translation[lang as Lang].elementTitle}
+                                />
                                 <FormInput
                                     name="url"
-                                    placeholder="Ссылка на сайт"
-
+                                    placeholder={translation[lang as Lang].websiteUrl}
                                 />
 
                                 <Button type="submit" disabled={form.formState.isSubmitting}>
-                                    Сохранить
+                                    {translation[lang as Lang].save}
                                 </Button>
                             </form>
                         </FormProvider>

@@ -13,12 +13,16 @@ import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { Eye, EyeOff } from "lucide-react";
 import { emailRegister } from "@/server/actions/email-register";
+import { useLanguage } from "@/app/providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 type RegisterFormProps = {
     onAuthModalClose: () => void;
 };
 
 export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
+    const { lang } = useLanguage();
+
     const form = useForm<RegisterFormValues>({
         defaultValues: {
             userName: "",
@@ -33,7 +37,7 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
 
     const toggleShowPassword = (
         isOff: boolean = false,
-        retype: boolean = false
+        retype: boolean = false,
     ) => {
         if (retype) {
             setShowRetypePassword(isOff);
@@ -49,9 +53,9 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
             }
             if (data?.data?.success) {
                 toast.success(
-                    `Пользователь ${data?.input?.userName} успешно зарегистрирован.
-                     На указанную почту отправлено письмо с подтверждением`,
-                    { duration: 5000 }
+                    `${translation[lang as Lang].user} ${data?.input?.userName} ${translation[lang as Lang].successfullyRegistered}.
+                     ${translation[lang as Lang].emailSent}`,
+                    { duration: 5000 },
                 );
                 onAuthModalClose();
             }
@@ -68,11 +72,11 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
                 className="flex flex-col gap-4 mt-4"
                 onSubmit={form.handleSubmit(onRegister)}
             >
-                <FormInput name="userName" placeholder="Имя" type="text" autoComplete="off" />
-                <FormInput name="userEmail" placeholder="Почта" type="email" autoComplete="off" />
+                <FormInput name="userName" placeholder={translation[lang as Lang].name} type="text" autoComplete="off" />
+                <FormInput name="userEmail" placeholder={translation[lang as Lang].email} type="email" autoComplete="off" />
                 <FormInput
                     name="userPassword"
-                    placeholder="Пароль"
+                    placeholder={translation[lang as Lang].password}
                     type={showPassword ? "text" : "password"}
                     autoComplete="off"
                     icon={
@@ -85,7 +89,7 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
                 />
                 <FormInput
                     name="retypePassword"
-                    placeholder="Повторите пароль"
+                    placeholder={translation[lang as Lang].retypePassword}
                     type={showRetypePassword ? "text" : "password"}
                     autoComplete="off"
                     icon={
@@ -98,7 +102,7 @@ export const RegisterForm = ({ onAuthModalClose }: RegisterFormProps) => {
                 />
 
                 <Button type="submit" disabled={status === "executing"}>
-                    Зарегистрироваться
+                    {translation[lang as Lang].signup}
                 </Button>
             </form>
         </FormProvider>

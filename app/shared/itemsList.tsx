@@ -8,10 +8,13 @@ import { Session } from "next-auth";
 import { useItemsStore } from "../stores/items-store";
 import { Websites } from "./websites";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Lang, translation } from "@/translation/translation";
+import { useLanguage } from "../providers/LanguageProvider";
 
 export const ItemsList = ({ session }: { session: Session | null }) => {
     // Данные и состояние
     const { setOpenLoginModal, setRegisterForm } = useUserStore((state) => state);
+    const { lang } = useLanguage();
     const { items, websites, websitesLoading, fetchItems, fetchWebsites } = useItemsStore((state) => state);
 
     const openLoginModal = () => setOpenLoginModal(true);
@@ -40,13 +43,13 @@ export const ItemsList = ({ session }: { session: Session | null }) => {
     ) : (
         <p>
             <Button variant="link" onClick={openLoginModal}>
-                Войдите
+                {translation[lang as Lang].signin}
             </Button>
-            или
+            {translation[lang as Lang].or}
             <Button variant="link" onClick={openRegisterModal}>
-                Зарегистрируйтесь
+                {translation[lang as Lang].signup}
             </Button>
-            чтобы добавлять и просматривать фильмы и игры
+            {translation[lang as Lang].viewAndAdd}
         </p>
     );
 };

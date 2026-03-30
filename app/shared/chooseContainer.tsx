@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { ChoosenItem } from "./choosenItem";
 import { useItemsStore } from "../stores/items-store";
 import { Session } from "next-auth";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 type ChooseContainerProps = {
     buttonText: string;
@@ -20,6 +22,7 @@ export const ChooseContainer = ({
     category,
     session,
 }: ChooseContainerProps) => {
+    const { lang } = useLanguage();
     const { items, fetchItems } = useItemsStore((state) => state);
     const [choosenItem, setChosenItem] = useState<Item | null>(null);
     const [data, setData] = useState<Array<Item>>([]);
@@ -60,7 +63,8 @@ export const ChooseContainer = ({
         }, 2000);
     };
 
-    if (items.length === 0) return <p>Вы еще ничего не добавили</p>
+    if (items.length === 0)
+        return <p>{translation[lang as Lang].youNothingAddedYet}</p>;
 
     return (
         <div className="w-2/4 mx-auto flex flex-col  gap-6 items-center h-screen p-4">

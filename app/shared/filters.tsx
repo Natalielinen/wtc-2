@@ -15,6 +15,8 @@ import { CategoriesEnum, GenreEnum } from "@/server/schema";
 import { useItemsStore } from "../stores/items-store";
 import { filterItems } from "@/server/actions/filter-items";
 import { SearchInputFilters } from "./search-item-filters";
+import { useLanguage } from "../providers/LanguageProvider";
+import { Lang, translation } from "@/translation/translation";
 
 type BtnVariant =
     | "outline"
@@ -27,17 +29,19 @@ type BtnVariant =
     | undefined;
 
 export const Filters = () => {
+    const { lang } = useLanguage();
     // Данные и состояние
     const [btnVariant, setBtnVariant] = useState<BtnVariant>("outline");
-    const [popularBtnVariant, setPopularBtnVariant] = useState<BtnVariant>("outline");
+    const [popularBtnVariant, setPopularBtnVariant] =
+        useState<BtnVariant>("outline");
     const [sortByLastVisited, setSortByLastVisited] = useState(false);
     const [sortByPopular, setSortByPopular] = useState(false);
     const [selectedGenre, setSelectedGenre] = useState<Genre>(
-        GenreEnum.enumValues[0]
+        GenreEnum.enumValues[0],
     );
 
     const [selectedCategory, setSelectedCategory] = useState<Category>(
-        CategoriesEnum.enumValues[0]
+        CategoriesEnum.enumValues[0],
     );
 
     const { setItems } = useItemsStore((state) => state);
@@ -69,12 +73,11 @@ export const Filters = () => {
             selectedCategory,
             selectedGenre,
             newSortByLastVisited,
-            newSortByPopular
+            newSortByPopular,
         );
 
         setItems(filtered);
     };
-
 
     const onGenreChange = async (genre: Genre) => {
         setSelectedGenre(genre);
@@ -101,7 +104,7 @@ export const Filters = () => {
             <div className="flex gap-4">
                 <Select onValueChange={onGenreChange}>
                     <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Жанр" />
+                        <SelectValue placeholder={translation[lang as Lang].genre} />
                     </SelectTrigger>
                     <SelectContent>
                         {GenreEnum.enumValues.map((genre) => (
@@ -114,7 +117,7 @@ export const Filters = () => {
 
                 <Select onValueChange={onCategoryChange}>
                     <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Категория" />
+                        <SelectValue placeholder={translation[lang as Lang].category} />
                     </SelectTrigger>
                     <SelectContent>
                         {CategoriesEnum.enumValues.map((cat) => (
@@ -129,7 +132,7 @@ export const Filters = () => {
             <SearchInputFilters />
 
             <Button
-                title="Самые популярные"
+                title={translation[lang as Lang].mostPopular}
                 variant={popularBtnVariant}
                 onClick={() => handleSortToggle("popular")}
                 className="mr-4"
@@ -138,7 +141,7 @@ export const Filters = () => {
             </Button>
 
             <Button
-                title="Давно не смотрел(а)"
+                title={translation[lang as Lang].haventWatchedLongTime}
                 variant={btnVariant}
                 onClick={() => handleSortToggle("lastVisited")}
             >

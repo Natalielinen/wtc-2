@@ -61,38 +61,43 @@ export const Preview = ({ item }: PreviewProps) => {
     // UI
     return (
         <>
-            <div className="relative rounded-2xl cursor-pointer overflow-hidden group">
+            <div className="relative rounded-2xl cursor-pointer overflow-hidden group min-w-[200px] h-[450px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={item.imageUrl}
                     alt={item.name}
-                    className="rounded-2xl cursor-pointer w-full h-[200px] object-cover"
+                    className="rounded-2xl cursor-pointer w-full h-full object-cover object-top"
                 />
                 <div className="absolute top-full left-0 w-full h-full bg-gray-500 bg-opacity-50 z-10 rounded-2xl cursor-pointer transition-all duration-500 ease-in-out group-hover:top-0">
                     <div className="text-white  h-[100%] flex flex-col gap-8">
-                        <div className="bg-black bg-opacity-50 p-4 flex justify-between">
+                        <div className="bg-black bg-opacity-50 p-4 ">
+                            <div className="flex justify-between items-center">
+                                <p className="font-bold">{item.name}</p>
+                                <div className="flex gap-2 w-[30%]">
+                                    <Button variant="ghost" onClick={() => setShow(true)}>
+                                        <Pencil />
+                                    </Button>
+
+                                    <Button variant="ghost" onClick={() => setShowDeleteModal(true)}>
+                                        <Trash2 />
+                                    </Button>
+                                </div>
+                            </div>
                             <p>
-                                <p>{item.name}</p>
-                                <p>
-                                    {" "}
+                                <p className="text-sm">
                                     {translation[lang as Lang].watchDate} {format(item?.lastVisited || new Date(), "dd.MM.yyyy")}
                                 </p>
-                                <p> {translation[lang as Lang].watched} {item.watchCount} {translation[lang as Lang].times}</p>
+                                <p className="text-sm"> {translation[lang as Lang].watched} {item.watchCount} {translation[lang as Lang].times}</p>
                             </p>
-                            <Button variant="ghost" onClick={() => setShow(true)}>
-                                <Pencil />
-                            </Button>
 
-                            <Button variant="ghost" onClick={() => setShowDeleteModal(true)}>
-                                <Trash2 />
-                            </Button>
+
                         </div>
-                        <div className="flex justify-center">
-                            <Button onClick={() => onLinkClick(item.sourceLink)} variant="ghost" size="lg" className="justify-self-center" >
+                        <div className="flex items-center justify-center flex-1">
+                            <button onClick={() => onLinkClick(item.sourceLink)} className="justify-self-center background-transparent border-0" >
                                 <Play
-                                    size={48}
+                                    size={60}
                                 />
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -34,7 +34,7 @@ export const ItemsList = ({ session }: { session: Session | null }) => {
     return session ? (
         <>
             {websitesLoading ? <Skeleton className="h-10 w-[300px] mb-4" /> : <Websites websites={websites} />}
-            <div className="grid grid-cols-3 gap-4 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {items.length > 0 &&
                     items.map((item) => <Preview key={item.id} item={item} />)}
             </div>

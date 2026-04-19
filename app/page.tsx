@@ -9,8 +9,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const lang = (await cookieStore).get("lang");
 
   return {
-    title: translation[lang?.value as Lang].title,
-    description: translation[lang?.value as Lang].description,
+    title: translation[lang?.value as Lang]?.title || "Что посмотреть?",
+    description: translation[lang?.value as Lang]?.description || "Персональная библиотека фильмов и игр",
     alternates: {
       languages: {
         ru: "/ru",
